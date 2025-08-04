@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan Produk</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; vertical-align: middle;}
+        th { background-color: #f2f2f2; }
+        .sync-form button { padding: 10px 15px; background-color: #1a237e; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;}
+        .toggle-form button { padding: 5px 10px; width: 100px; border: none; border-radius: 5px; color: white; cursor: pointer; }
+        .toggle-form .active { background-color: #4CAF50; /* Green */ }
+        .toggle-form .inactive { background-color: #f44336; /* Red */ }
+        .image-form { display: flex; gap: 5px; }
+        .image-form input { flex-grow: 1; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⚙️ Pengaturan Produk</h1>
+        <p><a href="/admin/dashboard" style="color: white;">Kembali ke Dashboard</a></p>
+    </header>
+    <main class="container">
+        <div class="card">
+            <h2>Sinkronisasi dengan Digiflazz</h2>
+            <p>Klik tombol di bawah untuk mengambil daftar produk terbaru dari Digiflazz. Produk baru akan ditambahkan ke daftar di bawah dalam keadaan nonaktif.</p>
+            <form class="sync-form" action="/admin/sync-digiflazz" method="POST">
+                <button type="submit">Sinkronkan Sekarang</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Daftar Produk</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Kategori</th>
+                        <th>Gambar</th>
+                        <th>Status Aktif</th>
+                        <th>Status Populer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach(product => { %>
+                        <tr>
+                            <td><strong><%= product.brand %></strong></td>
+                            <td><%= product.category %></td>
+                            <td>
+                                <form action="/admin/products/update-image/<%= product.id %>" method="POST" class="image-form">
+                                    <input type="text" name="imageUrl" placeholder="URL Gambar" value="<%= product.imageUrl || '' %>">
+                                    <button type="submit">Simpan</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/admin/products/toggle-active/<%= product.id %>" method="POST" class="toggle-form">
+                                    <button type="submit" class="<%= product.isActive ? 'active' : 'inactive' %>">
+                                        <%= product.isActive ? 'Aktif' : 'Nonaktif' %>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/admin/products/toggle-popular/<%= product.id %>" method="POST" class="toggle-form">
+                                    <button type="submit" class="<%= product.isPopular ? 'active' : 'inactive' %>">
+                                        <%= product.isPopular ? 'Populer' : 'Biasa' %>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

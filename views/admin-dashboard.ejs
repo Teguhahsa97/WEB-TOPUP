@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; vertical-align: middle;}
+        th { background-color: var(--bg-tertiary); }
+        .status { font-weight: 700; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; text-align: center; }
+        .status-success { color: #2b6131; background-color: rgba(63, 185, 80, 0.2); }
+        .status-pending { color: #b78d0f; background-color: rgba(240, 185, 11, 0.2); }
+        .status-processing { color: #3d7ad6; background-color: rgba(88, 166, 255, 0.2); }
+        .status-failed { color: #a13d3d; background-color: rgba(248, 81, 73, 0.2); }
+    </style>
+</head>
+<body>
+    <header style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 20px 0;">
+        <div class="container" style="display:flex; justify-content: space-between; align-items: center; margin: 0 auto;">
+            <h1 style="font-size: 1.5rem; margin:0;">📋 Admin Dashboard</h1>
+            <p style="margin:0;">
+                <a href="/admin/products" style="color: var(--text-secondary); margin-right: 20px; text-decoration: none;">Pengaturan Produk</a>
+                <a href="/admin/test-webhook" style="color: var(--text-secondary); margin-right: 20px; text-decoration: none;">Tes Webhook</a>
+                <a href="/admin/logout" style="color: var(--text-secondary); text-decoration: none;">Logout</a>
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2>Daftar Semua Pesanan</h2>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>No. Transaksi</th>
+                        <th>Produk</th>
+                        <th>ID Pelanggan</th>
+                        <th>Status Bayar</th>
+                        <th>Status Kirim</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (orders.length > 0) { %>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.trxId %></td>
+                                <td><%= order.product %></td>
+                                <td><%= order.productId %></td>
+                                <td>
+                                    <% if (order.paymentStatus === 'SUCCESS') { %> <span class="status status-success">BERHASIL</span>
+                                    <% } else if (order.paymentStatus === 'PENDING') { %> <span class="status status-pending">PENDING</span>
+                                    <% } else { %> <span class="status status-failed">GAGAL</span> <% } %>
+                                </td>
+                                <td>
+                                    <% if (order.fulfillmentStatus === 'SUCCESS') { %> <span class="status status-success">SUKSES</span>
+                                    <% } else if (order.fulfillmentStatus === 'PROCESSING') { %> <span class="status status-processing">DIPROSES</span>
+                                    <% } else if (order.fulfillmentStatus === 'PENDING') { %> <span class="status status-pending">MENUNGGU</span>
+                                    <% } else { %> <span class="status status-failed">GAGAL</span> <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="5" style="text-align: center;">Belum ada pesanan.</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Status Pesanan - GASS Topup</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">GASS Topup ⚡</a>
+            <ul class="nav-links">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/cek">Cek Pesanan</a></li>
+            </ul>
+        </div>
+    </nav>
+    <header><h1>🔍 Cek Status Pesanan</h1></header>
+    <main class="container">
+        <div class="card">
+            <form action="/cek-pesanan" method="GET">
+                <div class="form-group">
+                    <label for="trxId">Masukkan Nomor Transaksi Anda</label>
+                    <input type="text" id="trxId" name="trxId" placeholder="Contoh: GASS-17..." required>
+                </div>
+                <button type="submit" class="btn-order">Cek Sekarang</button>
+            </form>
+        </div>
+        <% if (typeof order !== 'undefined') { %>
+            <div class="card">
+                <h2>Hasil Pencarian</h2>
+                <% if (order) { %>
+                    <p>Status untuk pesanan <strong><%= order.trxId %></strong> adalah: <strong style="color: #ff5722;"><%= order.status %></strong></p>
+                    <p>Produk: <%= order.product %></p>
+                <% } else { %>
+                    <p>Nomor Transaksi tidak ditemukan.</p>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>

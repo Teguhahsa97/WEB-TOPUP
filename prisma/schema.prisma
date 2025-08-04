@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+model Order {
+  id                String   @id @default(cuid())
+  trxId             String   @unique
+  productId         String
+  phone             String
+  product           String
+  sku               String
+  payment           String
+  paymentStatus     String   @default("PENDING")
+  fulfillmentStatus String   @default("PENDING")
+  createdAt         DateTime @default(now())
+}
+model Product {
+  id        String   @id @default(cuid())
+  brand     String   @unique
+  category  String
+  isActive  Boolean  @default(false)
+  isPopular Boolean  @default(false)
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}

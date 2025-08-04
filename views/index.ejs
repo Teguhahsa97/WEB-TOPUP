@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GASS Topup - Cepat & Terpercaya</title>
+    <link rel="stylesheet" href="/css/style.css"> 
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">GASS<span>TOPUP</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/cek">Cek Pesanan</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Platform Top Up Tercepat</h1>
+            <p>Layanan instan untuk semua game dan kebutuhan digitalmu.</p>
+        </section>
+
+        <section class="category-tabs">
+            <button class="category-tab <%= selectedCategory === 'Semua' ? 'active' : '' %>">Semua</button>
+            <% categories.forEach(category => { %>
+                <button class="category-tab <%= selectedCategory === category ? 'active' : '' %>"><%= category %></button>
+            <% }) %>
+        </section>
+
+        <% if (popularProducts.length > 0 && selectedCategory === 'Semua') { %>
+            <section class="product-section">
+                <h2 class="section-title">🔥 Populer</h2>
+                <div class="product-grid-container">
+                    <% popularProducts.forEach(product => { %>
+                        <a href="/order/<%= product.brand %>" class="product-card">
+                            <img src="<%= product.imageUrl || 'https://via.placeholder.com/300x400.png/161B22/c9d1d9?text=No+Image' %>" alt="<%= product.brand %>">
+                            <div class="product-card-title"><%= product.brand %></div>
+                        </a>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+        
+        <section class="product-section">
+            <h2 class="section-title"><%= selectedCategory %></h2>
+            <div class="product-grid-container">
+                <% if (allProducts.length > 0) { %>
+                    <% allProducts.forEach(product => { %>
+                        <a href="/order/<%= product.brand %>" class="product-card">
+                            <img src="<%= product.imageUrl || 'https://via.placeholder.com/300x400.png/161B22/c9d1d9?text=No+Image' %>" alt="<%= product.brand %>">
+                            <div class="product-card-title"><%= product.brand %></div>
+                        </a>
+                    <% }) %>
+                <% } else { %>
+                    <p>Tidak ada produk di kategori ini.</p>
+                <% } %>
+            </div>
+        </section>
+    </div>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

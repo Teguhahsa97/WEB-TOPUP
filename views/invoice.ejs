@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice <%= order.trxId %> - GASS Topup</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .invoice-box { padding: 30px; }
+        .invoice-header { text-align: center; margin-bottom: 30px; }
+        .invoice-header h1 { font-size: 2rem; color: var(--text-primary); margin: 0; }
+        .invoice-header p { color: var(--text-secondary); }
+        .invoice-details table { width: 100%; text-align: left; }
+        .invoice-details th, .invoice-details td { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .invoice-details th { color: var(--text-secondary); font-weight: 500; }
+        .invoice-details td { font-weight: 600; text-align: right; }
+        .invoice-status { font-weight: 700; }
+        .status-success { color: var(--success-color); }
+        .status-pending { color: #f0b90b; }
+        .status-failed { color: var(--danger-color); }
+        .status-processing { color: var(--accent-primary); }
+        .invoice-actions { text-align: center; margin-top: 30px; }
+        .invoice-actions a { display: inline-block; background-color: var(--accent-primary); color: var(--bg-primary); padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">GASS<span>TOPUP</span></a>
+            <ul class="nav-links">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/cek">Cek Pesanan</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card invoice-box">
+            <div class="invoice-header">
+                <h1>Detail Transaksi</h1>
+                <p>Terima kasih telah bertransaksi di GASS Topup.</p>
+            </div>
+
+            <div class="invoice-details">
+                <table>
+                    <tr>
+                        <th>NO. TRANSAKSI</th>
+                        <td><%= order.trxId %></td>
+                    </tr>
+                    <tr>
+                        <th>PRODUK</th>
+                        <td><%= order.product %></td>
+                    </tr>
+                    <tr>
+                        <th>ID TUJUAN</th>
+                        <td><%= order.productId %></td>
+                    </tr>
+                    <tr>
+                        <th>STATUS PEMBAYARAN</th>
+                        <td>
+                            <% if (order.paymentStatus === 'SUCCESS') { %><span class="invoice-status status-success">BERHASIL</span>
+                            <% } else if (order.paymentStatus === 'PENDING') { %><span class="invoice-status status-pending">PENDING</span>
+                            <% } else { %><span class="invoice-status status-failed">GAGAL</span><% } %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>STATUS PENGIRIMAN</th>
+                        <td>
+                            <% if (order.fulfillmentStatus === 'SUCCESS') { %><span class="invoice-status status-success">SUKSES</span>
+                            <% } else if (order.fulfillmentStatus === 'PROCESSING') { %><span class="invoice-status status-processing">DIPROSES</span>
+                            <% } else if (order.fulfillmentStatus === 'PENDING') { %><span class="invoice-status status-pending">MENUNGGU</span>
+                            <% } else { %><span class="invoice-status status-failed">GAGAL</span><% } %>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="invoice-actions">
+                <a href="/">Kembali ke Beranda</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
