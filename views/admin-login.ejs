@@ -4,26 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --admin-bg-primary: #0f0f23;
+            --admin-bg-secondary: #1a1a2e;
+            --admin-bg-tertiary: #16213e;
+            --admin-accent-primary: #4f46e5;
+            --admin-accent-secondary: #7c3aed;
+            --admin-text-primary: #ffffff;
+            --admin-text-secondary: #a1a1aa;
+            --admin-border: #374151;
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-info: #3b82f6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--admin-bg-primary) 0%, var(--admin-bg-secondary) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--admin-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: var(--admin-bg-secondary);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--admin-border);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: var(--admin-text-primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--admin-accent-primary), var(--admin-accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .login-header p {
+            color: var(--admin-text-secondary);
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: var(--admin-text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--admin-border);
+            border-radius: 12px;
+            background: var(--admin-bg-primary);
+            color: var(--admin-text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--admin-accent-primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            background: var(--admin-bg-primary);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--admin-text-secondary);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            border: none;
+            border-radius: 12px;
+            color: var(--admin-text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .icon {
+            margin-right: 10px;
+            color: var(--admin-accent-primary);
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .login-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>🔐 Admin Login</h1>
-    </header>
-    <main class="container">
-        <div class="card" style="max-width: 400px; margin: 40px auto;">
-            <form action="/admin/login" method="POST">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn-order">Login</button>
-            </form>
+    <div class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-shield-alt icon"></i>Admin Login</h1>
+            <p>Masuk ke panel administrasi</p>
         </div>
-    </main>
+        
+        <form action="/admin/login" method="POST">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user icon"></i>Username</label>
+                <input type="text" id="username" name="username" placeholder="Masukkan username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock icon"></i>Password</label>
+                <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                Masuk ke Dashboard
+            </button>
+        </form>
+    </div>
 </body>
 </html>

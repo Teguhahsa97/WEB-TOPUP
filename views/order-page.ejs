@@ -3,105 +3,1096 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order <%= product.brand %> - GASS Topup</title>
-    <link rel="stylesheet" href="/css/style.css"> 
+    <title>Order - <%= product.brand %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+             background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 50%, #000000 100%);
+             background-attachment: fixed;
+             color: #e2e8f0;
+             font-family: 'Inter', sans-serif;
+             margin: 0;
+             padding: 0;
+             min-height: 100vh;
+         }
+         
+         .order-container {
+             max-width: 1400px;
+             margin: 0 auto;
+             padding: 20px;
+         }
+         
+         .order-header {
+             background: rgba(255, 255, 255, 0.05);
+             backdrop-filter: blur(20px);
+             border-radius: 20px;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             padding: 30px;
+             margin-bottom: 30px;
+         }
+         
+         .product-info {
+             display: flex;
+             align-items: center;
+             gap: 25px;
+         }
+         
+         .product-image {
+             width: 80px;
+             height: 80px;
+             border-radius: 15px;
+             object-fit: cover;
+             border: 2px solid rgba(255, 255, 255, 0.1);
+         }
+         
+         .product-details {
+             flex: 1;
+         }
+         
+         .product-title {
+             font-size: 2rem;
+             font-weight: 800;
+             margin: 0 0 8px 0;
+             background: linear-gradient(135deg, #6366f1, #8b5cf6, #d946ef);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+         }
+         
+         .product-brand-name {
+             font-size: 2.5rem;
+             font-weight: 900;
+             margin: 0 0 12px 0;
+             background: linear-gradient(135deg, #00d4ff, #0099cc);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+             letter-spacing: 2px;
+         }
+         
+         .product-subtitle {
+             font-size: 1.1rem;
+             color: #94a3b8;
+             margin: 0;
+             font-weight: 600;
+             letter-spacing: 1px;
+             text-transform: uppercase;
+         }
+         
+         .order-content {
+              max-width: 1200px;
+              margin: 0 auto;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 40px;
+              align-items: start;
+          }
+          
+          .left-column {
+              background: rgba(255, 255, 255, 0.05);
+              backdrop-filter: blur(20px);
+              border-radius: 20px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              padding: 40px;
+          }
+          
+          .right-column {
+              background: rgba(255, 255, 255, 0.05);
+              backdrop-filter: blur(20px);
+              border-radius: 20px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              padding: 40px;
+              position: sticky;
+              top: 20px;
+          }
+          
+          .form-sections {
+              display: block;
+              margin-bottom: 30px;
+          }
+          
+          .denomination-section {
+              margin-bottom: 30px;
+          }
+          
+          .denomination-grid {
+              display: grid;
+              grid-template-columns: 1fr;
+              gap: 15px;
+              margin-bottom: 25px;
+          }
+          
+          .form-section {
+              margin-bottom: 25px;
+          }
+          
+          .form-section:last-child {
+              margin-bottom: 0;
+          }
+          
+          .checkout-section {
+              margin-top: 40px;
+              padding: 25px;
+              background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+              border-radius: 15px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              text-align: center;
+          }
+        
+        .instruction-steps {
+             display: flex;
+             flex-direction: column;
+             gap: 12px;
+         }
+         
+         .step-item {
+             display: flex;
+             align-items: center;
+             gap: 15px;
+             padding: 12px 0;
+         }
+         
+         .step-number {
+             width: 30px;
+             height: 30px;
+             border-radius: 50%;
+             background: linear-gradient(135deg, #6366f1, #8b5cf6);
+             color: white;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-weight: 600;
+             font-size: 14px;
+             flex-shrink: 0;
+         }
+         
+         .step-text {
+             color: #cbd5e1;
+             font-size: 14px;
+         }
+         
+         .form-note {
+             margin-top: 8px;
+             font-size: 12px;
+             color: #64748b;
+             display: flex;
+             align-items: center;
+             gap: 8px;
+         }
+         
+         .form-note i {
+             color: #8b5cf6;
+         }
+
+         .required {
+             color: #ff4757;
+             font-weight: bold;
+         }
+
+         .form-hint {
+            font-size: 0.8em;
+            color: #b0b0b0;
+            margin-top: 4px;
+            display: block;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        select option {
+            background: #2c3e50;
+            color: white;
+        }
+         
+
+         
+         .denomination-section {
+             height: 100%;
+         }
+         
+         .denomination-icon {
+             margin-bottom: 12px;
+         }
+         
+         .denomination-icon i {
+             font-size: 24px;
+             color: #8b5cf6;
+         }
+         
+         .denomination-details {
+             text-align: left;
+         }
+         
+         .form-section {
+             margin-bottom: 35px;
+         }
+         
+         .section-title {
+             font-size: 20px;
+             font-weight: 600;
+             color: #e2e8f0;
+             margin-bottom: 20px;
+             display: flex;
+             align-items: center;
+             gap: 12px;
+         }
+         
+         .section-title i {
+             color: #8b5cf6;
+             font-size: 22px;
+         }
+         
+         .form-group {
+             margin-bottom: 20px;
+         }
+         
+         .form-group label {
+             display: block;
+             margin-bottom: 8px;
+             color: #e2e8f0;
+             font-weight: 600;
+             font-size: 14px;
+         }
+         
+         .form-group input,
+         .form-group select {
+             width: 100%;
+             padding: 12px 16px;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             border-radius: 10px;
+             background: rgba(255, 255, 255, 0.05);
+             color: #e2e8f0;
+             font-size: 14px;
+             transition: all 0.3s ease;
+             box-sizing: border-box;
+         }
+         
+         .form-group input:focus,
+         .form-group select:focus {
+             outline: none;
+             border-color: #8b5cf6;
+             background: rgba(255, 255, 255, 0.08);
+             box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+         }
+         
+         .form-group input::placeholder {
+             color: #64748b;
+         }
+         
+         .form-row {
+             display: grid;
+             grid-template-columns: 1fr 1fr;
+             gap: 15px;
+         }
+        
+        .denomination-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .denomination-item {
+             background: rgba(255, 255, 255, 0.05);
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             border-radius: 12px;
+             padding: 15px 10px;
+             text-align: center;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             position: relative;
+             overflow: hidden;
+         }
+         
+         .denomination-item:hover {
+             border-color: #8b5cf6;
+             background: rgba(139, 92, 246, 0.1);
+             transform: translateY(-1px);
+         }
+         
+         .denomination-item.selected {
+             border-color: #8b5cf6;
+             background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.1));
+             box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+         }
+         
+         .denomination-name {
+             font-size: 14px;
+             font-weight: 700;
+             color: #e2e8f0;
+             margin-bottom: 6px;
+         }
+         
+         .denomination-price {
+             font-size: 14px;
+             font-weight: 700;
+             color: #8b5cf6;
+         }
+         
+         .denomination-item.selected .denomination-name,
+         .denomination-item.selected .denomination-price {
+              color: white;
+          }
+         
+         .denomination-category-title {
+             font-size: 16px;
+             font-weight: 700;
+             margin: 0 0 15px 0;
+             color: #e2e8f0;
+             display: flex;
+             align-items: center;
+             gap: 8px;
+         }
+         
+         .denomination-category-title i {
+             color: #8b5cf6;
+             font-size: 14px;
+         }
+         
+
+         
+         .total-price {
+             font-size: 20px;
+             font-weight: 800;
+             color: #e2e8f0;
+             text-align: center;
+             margin-bottom: 15px;
+             padding: 15px;
+             background: rgba(255, 255, 255, 0.05);
+             border-radius: 12px;
+             border: 1px solid rgba(255, 255, 255, 0.1);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             gap: 12px;
+         }
+         
+         .total-price i {
+             color: #8b5cf6;
+         }
+         
+         .buy-button {
+             width: 100%;
+             padding: 15px;
+             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+             color: white;
+             border: none;
+             border-radius: 12px;
+             font-size: 16px;
+             font-weight: 700;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             position: relative;
+             overflow: hidden;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             gap: 10px;
+         }
+         
+         .buy-button:hover {
+             transform: translateY(-1px);
+             box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+         }
+         
+         .buy-button:active {
+             transform: translateY(0);
+         }
+         
+         .buy-button:disabled {
+             opacity: 0.6;
+             cursor: not-allowed;
+             transform: none;
+         }
+        
+        /* Navbar menggunakan CSS dari style.css yang sudah ada */
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            color: #e2e8f0;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer p {
+            margin: 0;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+              .order-container {
+                  padding: 15px;
+              }
+              
+              .order-content {
+                  grid-template-columns: 1fr;
+                  gap: 20px;
+              }
+              
+              .left-column, .right-column {
+                  padding: 25px;
+              }
+              
+              .right-column {
+                  position: static;
+              }
+              
+              .form-sections {
+                  margin-bottom: 20px;
+              }
+              
+              .denomination-grid {
+                  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                  gap: 12px;
+              }
+              
+              .product-info {
+                  flex-direction: column;
+                  text-align: center;
+                  gap: 15px;
+              }
+              
+              .product-brand-name {
+                  font-size: 1.8rem;
+                  letter-spacing: 1px;
+              }
+              
+              .product-subtitle {
+                  font-size: 0.9rem;
+                  letter-spacing: 0.5px;
+              }
+              
+              .section-title {
+                  font-size: 1.1rem;
+              }
+          }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="navbar-brand">GASS<span>TOPUP</span></a>
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-bolt" style="margin-right: 8px;"></i>
+                AHSA<span>STORE</span>
+            </a>
             <ul class="nav-links">
-                <li><a href="/">Beranda</a></li>
-                <li><a href="/cek">Cek Pesanan</a></li>
+                <li><a href="/"><i class="fas fa-home"></i> Beranda</a></li>
+                <li><a href="/cek"><i class="fas fa-search"></i> Cek Pesanan</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="order-product-header card">
-            <img src="<%= product.imageUrl || 'https://via.placeholder.com/300x400.png/161B22/c9d1d9?text=No+Image' %>" alt="<%= product.brand %>">
-            <div>
-                <h1><%= product.brand %></h1>
-                <p>Top up <%= product.category %> cepat dan mudah.</p>
-            </div>
-        </div>
+    <div class="order-container">
 
-        <form id="order-form" action="/order" method="POST">
-            <div class="order-container">
-                <section class="form-section">
-                    <div class="card">
-                        <div class="card-header"><h2>Lengkapi Data</h2></div>
-                        <% if (product.category === 'Games') { %>
-                            <div class="form-group"><label for="productId">User ID (Zone ID)</label><input type="text" id="productId" name="productId" placeholder="Contoh: 12345678 (1234)" required></div>
-                        <% } else if (product.category === 'Pulsa' || product.category === 'Paket Data') { %>
-                            <div class="form-group"><label for="productId">Nomor HP Tujuan</label><input type="tel" id="productId" name="productId" placeholder="Contoh: 081234567890" required></div>
-                        <% } else if (product.category === 'PLN') { %>
-                            <div class="form-group"><label for="productId">Nomor Meter / ID Pelanggan PLN</label><input type="text" id="productId" name="productId" placeholder="Masukkan nomor meter Anda" required></div>
-                        <% } else { %>
-                            <div class="form-group"><label for="productId">ID Pelanggan / Nomor Tujuan</label><input type="text" id="productId" name="productId" required></div>
-                        <% } %>
-                        <div class="form-group">
-                            <label for="phone">Nomor WhatsApp</label>
-                            <input type="tel" id="phone" name="phone" placeholder="Untuk menerima bukti transaksi" required>
+        <!-- Main Content -->
+        <div class="order-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Product Header in Left Column -->
+                <div class="product-info" style="margin-bottom: 30px;">
+                    <img src="<%= product.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMTUiIGZpbGw9IiNFMkU4RjAiLz4KPHN2ZyB4PSIyNCIgeT0iMjQiIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjNjc4M0VBIj4KPHA+Tm8gSW1hZ2U8L3A+Cjwvc3ZnPgo8L3N2Zz4K' %>" alt="<%= product.brand %>" class="product-image">
+                    <div class="product-details">
+                        <h1 class="product-brand-name"><%= product.brand %></h1>
+                        <p class="product-subtitle">TOP UP GAME TERMURAH DAN #GAKPAKELAMA</p>
+                    </div>
+                </div>
+                
+                <form id="order-form" action="/order" method="POST">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    
+                    <!-- Instructions Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-list-ol"></i>
+                            Bagaimana cara melakukan transaksi?
+                        </h3>
+                        <div class="instruction-steps">
+                            <div class="step-item">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Masukkan data diri dengan benar</span>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Pilih nominal yang diinginkan</span>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Masukkan nomor WhatsApp yang aktif</span>
+                            </div>
+                            <div class="step-item">
+                                <span class="step-number">4</span>
+                                <span class="step-text">Klik "Beli Sekarang" dan lakukan pembayaran</span>
+                            </div>
                         </div>
                     </div>
-                </section>
-                <section class="denomination-section">
-                    <div class="card">
-                        <div class="card-header"><h2>Pilih Nominal</h2></div>
-                        <% sortedGroupNames.forEach(category => { %>
-                            <% if (groupCount > 1) { %>
-                                <h3 class="denomination-category-title"><%= category %></h3>
+
+                    <!-- Form Sections -->
+                    <div class="form-sections">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-gamepad"></i>
+                                Detail Akun
+                            </h3>
+                            <% if (product.category === 'Games') { %>
+                                <!-- VOUCHER GAMES (menggunakan nomor HP/email) -->
+                                <% if ((product.name && (product.name.toLowerCase().includes('garena') || product.name.toLowerCase().includes('shell'))) || (product.brand && (product.brand.toLowerCase().includes('garena') || product.brand.toLowerCase().includes('shell')))) { %>
+                                    <div class="form-group">
+                                        <label for="phone_number">Nomor HP <span class="required">*</span></label>
+                                        <input type="tel" id="phone_number" name="phone_number" placeholder="Contoh: 08123456789" pattern="[0-9]{10,13}" required>
+                                        <small class="form-hint">Nomor HP yang terdaftar di akun Garena</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('steam') || product.name.toLowerCase().includes('wallet'))) || (product.brand && product.brand.toLowerCase().includes('steam'))) { %>
+                                    <div class="form-group">
+                                        <label for="steam_id">Steam ID / Email <span class="required">*</span></label>
+                                        <input type="text" id="steam_id" name="steam_id" placeholder="Contoh: steamid atau email@domain.com" required>
+                                        <small class="form-hint">Steam ID atau email yang terdaftar di Steam</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('google play') || product.name.toLowerCase().includes('play store'))) || (product.brand && product.brand.toLowerCase().includes('google'))) { %>
+                                    <div class="form-group">
+                                        <label for="email">Email Google <span class="required">*</span></label>
+                                        <input type="email" id="email" name="email" placeholder="Contoh: email@gmail.com" required>
+                                        <small class="form-hint">Email yang terdaftar di Google Play Store</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('itunes') || product.name.toLowerCase().includes('app store') || product.name.toLowerCase().includes('apple'))) || (product.brand && product.brand.toLowerCase().includes('apple'))) { %>
+                                    <div class="form-group">
+                                        <label for="apple_id">Apple ID <span class="required">*</span></label>
+                                        <input type="email" id="apple_id" name="apple_id" placeholder="Contoh: appleid@icloud.com" required>
+                                        <small class="form-hint">Apple ID yang terdaftar di App Store</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('playstation') || product.name.toLowerCase().includes('psn'))) || (product.brand && product.brand.toLowerCase().includes('playstation'))) { %>
+                                    <div class="form-group">
+                                        <label for="psn_id">PSN ID / Email <span class="required">*</span></label>
+                                        <input type="text" id="psn_id" name="psn_id" placeholder="Contoh: PSN_ID atau email@domain.com" required>
+                                        <small class="form-hint">PSN ID atau email yang terdaftar di PlayStation</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('xbox') || product.name.toLowerCase().includes('microsoft'))) || (product.brand && product.brand.toLowerCase().includes('xbox'))) { %>
+                                    <div class="form-group">
+                                        <label for="xbox_gamertag">Xbox Gamertag / Email <span class="required">*</span></label>
+                                        <input type="text" id="xbox_gamertag" name="xbox_gamertag" placeholder="Contoh: Gamertag atau email@outlook.com" required>
+                                        <small class="form-hint">Xbox Gamertag atau email Microsoft</small>
+                                    </div>
+                                <!-- DIRECT TOP-UP GAMES (menggunakan ID game) -->
+                                <% } else if (product.name && (product.name.toLowerCase().includes('mobile legends') || product.name.toLowerCase().includes('mlbb') || product.name.toLowerCase().includes('ml'))) { %>
+                                    <div class="form-group">
+                                        <label for="user_id">User ID <span class="required">*</span></label>
+                                        <input type="text" id="user_id" name="user_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,10}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zone_id">Zone ID <span class="required">*</span></label>
+                                        <input type="text" id="zone_id" name="zone_id" placeholder="Contoh: 1234" pattern="[0-9]{4,6}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('free fire') || product.name.toLowerCase().includes('ff'))) || (product.brand && product.brand.toLowerCase().includes('free fire'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('pubg') || product.name.toLowerCase().includes('playerunknown') || product.name.toLowerCase().includes('bgmi'))) || (product.brand && (product.brand.toLowerCase().includes('pubg') || product.brand.toLowerCase().includes('battlegrounds')))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 5123456789" pattern="[0-9]{10,12}" required>
+                                    </div>
+                                <% } else if (product.name && (product.name.toLowerCase().includes('genshin') || product.name.toLowerCase().includes('honkai') || product.name.toLowerCase().includes('hsr'))) { %>
+                                    <div class="form-group">
+                                        <label for="uid">UID <span class="required">*</span></label>
+                                        <input type="text" id="uid" name="uid" placeholder="Contoh: 600123456" pattern="[0-9]{8,10}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="server">Server</label>
+                                        <select id="server" name="server">
+                                            <option value="">Pilih Server (Opsional)</option>
+                                            <option value="asia">Asia</option>
+                                            <option value="america">America</option>
+                                            <option value="europe">Europe</option>
+                                            <option value="sar">TW/HK/MO</option>
+                                        </select>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('valorant') || product.name.toLowerCase().includes('riot'))) || (product.brand && (product.brand.toLowerCase().includes('valorant') || product.brand.toLowerCase().includes('riot')))) { %>
+                                    <div class="form-group">
+                                        <label for="riot_id">Riot ID <span class="required">*</span></label>
+                                        <input type="text" id="riot_id" name="riot_id" placeholder="Contoh: PlayerName#1234" pattern=".+#[a-zA-Z0-9]{3,5}" required>
+                                        <small class="form-hint">Format: NamaPlayer#Tag (contoh: JohnDoe#1234)</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('call of duty') || product.name.toLowerCase().includes('cod') || product.name.toLowerCase().includes('warzone'))) || (product.brand && (product.brand.toLowerCase().includes('call of duty') || product.brand.toLowerCase().includes('cod')))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 1234567890123456" pattern="[0-9]{10,20}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('arena of valor') || product.name.toLowerCase().includes('aov') || product.name.toLowerCase().includes('liên quân'))) || (product.brand && (product.brand.toLowerCase().includes('arena of valor') || product.brand.toLowerCase().includes('aov')))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('point blank') || product.name.toLowerCase().includes('pb'))) || (product.brand && (product.brand.toLowerCase().includes('point blank') || product.brand.toLowerCase().includes('pb')))) { %>
+                                    <div class="form-group">
+                                        <label for="username">Username <span class="required">*</span></label>
+                                        <input type="text" id="username" name="username" placeholder="Contoh: PlayerName" required>
+                                    </div>
+                                <% } else if (product.name && (product.name.toLowerCase().includes('ragnarok') || product.name.toLowerCase().includes('rom'))) { %>
+                                    <div class="form-group">
+                                        <label for="character_name">Nama Karakter <span class="required">*</span></label>
+                                        <input type="text" id="character_name" name="character_name" placeholder="Contoh: NamaKarakter" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="server">Server</label>
+                                        <select id="server" name="server">
+                                            <option value="">Pilih Server (Opsional)</option>
+                                            <option value="eternal_love">Eternal Love</option>
+                                            <option value="midnight_party">Midnight Party</option>
+                                            <option value="memory_of_faith">Memory of Faith</option>
+                                        </select>
+                                    </div>
+                                <!-- SUPERCELL GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('clash of clans') || product.name.toLowerCase().includes('coc'))) || (product.brand && product.brand.toLowerCase().includes('clash of clans'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_tag">Player Tag <span class="required">*</span></label>
+                                        <input type="text" id="player_tag" name="player_tag" placeholder="Contoh: #2PP" pattern="#[A-Z0-9]{3,9}" required>
+                                        <small class="form-hint">Player Tag dimulai dengan # (contoh: #2PP)</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('clash royale') || product.name.toLowerCase().includes('cr'))) || (product.brand && product.brand.toLowerCase().includes('clash royale'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_tag">Player Tag <span class="required">*</span></label>
+                                        <input type="text" id="player_tag" name="player_tag" placeholder="Contoh: #2PP" pattern="#[A-Z0-9]{3,9}" required>
+                                        <small class="form-hint">Player Tag dimulai dengan # (contoh: #2PP)</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('brawl stars') || product.name.toLowerCase().includes('bs'))) || (product.brand && product.brand.toLowerCase().includes('brawl stars'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_tag">Player Tag <span class="required">*</span></label>
+                                        <input type="text" id="player_tag" name="player_tag" placeholder="Contoh: #2PP" pattern="#[A-Z0-9]{3,9}" required>
+                                        <small class="form-hint">Player Tag dimulai dengan # (contoh: #2PP)</small>
+                                    </div>
+                                <!-- RIOT GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('wild rift') || product.name.toLowerCase().includes('lol'))) || (product.brand && product.brand.toLowerCase().includes('wild rift'))) { %>
+                                    <div class="form-group">
+                                        <label for="riot_id">Riot ID <span class="required">*</span></label>
+                                        <input type="text" id="riot_id" name="riot_id" placeholder="Contoh: PlayerName#TAG" pattern=".+#.+" required>
+                                        <small class="form-hint">Format: NamaPlayer#TAG (contoh: JohnDoe#1234)</small>
+                                    </div>
+                                <!-- OTHER POPULAR GAMES -->
+                                <% } else if ((product.name && product.name.toLowerCase().includes('roblox')) || (product.brand && product.brand.toLowerCase().includes('roblox'))) { %>
+                                    <div class="form-group">
+                                        <label for="username">Username Roblox <span class="required">*</span></label>
+                                        <input type="text" id="username" name="username" placeholder="Contoh: MyUsername" required>
+                                        <small class="form-hint">Username Roblox Anda</small>
+                                    </div>
+                                <% } else if ((product.name && product.name.toLowerCase().includes('minecraft')) || (product.brand && product.brand.toLowerCase().includes('minecraft'))) { %>
+                                    <div class="form-group">
+                                        <label for="minecraft_username">Minecraft Username <span class="required">*</span></label>
+                                        <input type="text" id="minecraft_username" name="minecraft_username" placeholder="Contoh: Steve123" required>
+                                        <small class="form-hint">Username Minecraft Java Edition</small>
+                                    </div>
+                                <% } else if ((product.name && product.name.toLowerCase().includes('fortnite')) || (product.brand && product.brand.toLowerCase().includes('fortnite'))) { %>
+                                    <div class="form-group">
+                                        <label for="epic_username">Epic Games Username <span class="required">*</span></label>
+                                        <input type="text" id="epic_username" name="epic_username" placeholder="Contoh: MyEpicName" required>
+                                        <small class="form-hint">Username Epic Games Anda</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('among us') || product.name.toLowerCase().includes('amongus'))) || (product.brand && product.brand.toLowerCase().includes('among us'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_name">Player Name <span class="required">*</span></label>
+                                        <input type="text" id="player_name" name="player_name" placeholder="Contoh: Crewmate" required>
+                                        <small class="form-hint">Nama pemain Among Us</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('stumble guys') || product.name.toLowerCase().includes('stumbleguys'))) || (product.brand && product.brand.toLowerCase().includes('stumble guys'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                        <small class="form-hint">Player ID Stumble Guys</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('higgs domino') || product.name.toLowerCase().includes('domino'))) || (product.brand && product.brand.toLowerCase().includes('higgs'))) { %>
+                                    <div class="form-group">
+                                        <label for="user_id">User ID <span class="required">*</span></label>
+                                        <input type="text" id="user_id" name="user_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                        <small class="form-hint">User ID Higgs Domino</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('8 ball pool') || product.name.toLowerCase().includes('8ball'))) || (product.brand && product.brand.toLowerCase().includes('8 ball'))) { %>
+                                    <div class="form-group">
+                                        <label for="unique_id">Unique ID <span class="required">*</span></label>
+                                        <input type="text" id="unique_id" name="unique_id" placeholder="Contoh: 123-456-789" required>
+                                        <small class="form-hint">Unique ID 8 Ball Pool</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('lords mobile') || product.name.toLowerCase().includes('lordsmobile'))) || (product.brand && product.brand.toLowerCase().includes('lords mobile'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="server">Server <span class="required">*</span></label>
+                                        <input type="text" id="server" name="server" placeholder="Contoh: K123" required>
+                                        <small class="form-hint">Server Kingdom (contoh: K123)</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('state of survival') || product.name.toLowerCase().includes('sos'))) || (product.brand && product.brand.toLowerCase().includes('state of survival'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="state_id">State ID <span class="required">*</span></label>
+                                        <input type="text" id="state_id" name="state_id" placeholder="Contoh: 123" pattern="[0-9]{1,4}" required>
+                                        <small class="form-hint">State ID (1-4 digit)</small>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('rise of kingdoms') || product.name.toLowerCase().includes('rok'))) || (product.brand && product.brand.toLowerCase().includes('rise of kingdoms'))) { %>
+                                    <div class="form-group">
+                                        <label for="governor_id">Governor ID <span class="required">*</span></label>
+                                        <input type="text" id="governor_id" name="governor_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kingdom">Kingdom <span class="required">*</span></label>
+                                        <input type="text" id="kingdom" name="kingdom" placeholder="Contoh: 1234" pattern="[0-9]{1,4}" required>
+                                        <small class="form-hint">Kingdom ID (1-4 digit)</small>
+                                    </div>
+                                <!-- BOARD GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('ludo king') || product.name.toLowerCase().includes('ludo'))) || (product.brand && product.brand.toLowerCase().includes('ludo'))) { %>
+                                    <div class="form-group">
+                                        <label for="user_id">User ID <span class="required">*</span></label>
+                                        <input type="text" id="user_id" name="user_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                        <small class="form-hint">User ID Ludo King</small>
+                                    </div>
+                                <!-- MOBA GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('heroes evolved') || product.name.toLowerCase().includes('he'))) || (product.brand && product.brand.toLowerCase().includes('heroes evolved'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('heroes of newerth') || product.name.toLowerCase().includes('hon'))) || (product.brand && product.brand.toLowerCase().includes('heroes of newerth'))) { %>
+                                    <div class="form-group">
+                                        <label for="username">Username <span class="required">*</span></label>
+                                        <input type="text" id="username" name="username" placeholder="Contoh: MyUsername" required>
+                                    </div>
+                                <!-- RACING GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('speed drifters') || product.name.toLowerCase().includes('speed'))) || (product.brand && product.brand.toLowerCase().includes('speed drifters'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <!-- CARD GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('uno') || product.name.toLowerCase().includes('card'))) || (product.brand && product.brand.toLowerCase().includes('uno'))) { %>
+                                    <div class="form-group">
+                                        <label for="username">Username <span class="required">*</span></label>
+                                        <input type="text" id="username" name="username" placeholder="Contoh: MyUsername" required>
+                                    </div>
+                                <!-- SIMULATION GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('township') || product.name.toLowerCase().includes('town'))) || (product.brand && product.brand.toLowerCase().includes('township'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('hay day') || product.name.toLowerCase().includes('hayday'))) || (product.brand && product.brand.toLowerCase().includes('hay day'))) { %>
+                                    <div class="form-group">
+                                        <label for="player_tag">Player Tag <span class="required">*</span></label>
+                                        <input type="text" id="player_tag" name="player_tag" placeholder="Contoh: #ABC123" pattern="#[A-Z0-9]{3,9}" required>
+                                        <small class="form-hint">Player Tag dimulai dengan # (contoh: #ABC123)</small>
+                                    </div>
+                                <!-- PUZZLE GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('candy crush') || product.name.toLowerCase().includes('candy'))) || (product.brand && product.brand.toLowerCase().includes('candy crush'))) { %>
+                                    <div class="form-group">
+                                        <label for="user_id">User ID <span class="required">*</span></label>
+                                        <input type="text" id="user_id" name="user_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <!-- FIGHTING GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('tekken') || product.name.toLowerCase().includes('street fighter'))) || (product.brand && (product.brand.toLowerCase().includes('tekken') || product.brand.toLowerCase().includes('street fighter')))) { %>
+                                    <div class="form-group">
+                                        <label for="fighter_id">Fighter ID <span class="required">*</span></label>
+                                        <input type="text" id="fighter_id" name="fighter_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <!-- SPORTS GAMES -->
+                                <% } else if ((product.name && (product.name.toLowerCase().includes('fifa') || product.name.toLowerCase().includes('pes') || product.name.toLowerCase().includes('efootball'))) || (product.brand && (product.brand.toLowerCase().includes('fifa') || product.brand.toLowerCase().includes('pes')))) { %>
+                                    <div class="form-group">
+                                        <label for="player_id">Player ID <span class="required">*</span></label>
+                                        <input type="text" id="player_id" name="player_id" placeholder="Contoh: 123456789" pattern="[0-9]{8,12}" required>
+                                    </div>
+                                <% } else { %>
+                                    <!-- Default untuk game lainnya -->
+                                    <div class="form-group">
+                                        <label for="user_id">User ID / Player ID <span class="required">*</span></label>
+                                        <input type="text" id="user_id" name="user_id" placeholder="Masukkan ID pemain" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zone_id">Server ID / Zone ID</label>
+                                        <input type="text" id="zone_id" name="zone_id" placeholder="Masukkan Server/Zone ID (jika diperlukan)">
+                                    </div>
+                                <% } %>
+                            <% } else if (product.category === 'Pulsa' || product.category === 'Paket Data') { %>
+                                <div class="form-group">
+                                    <label for="phone_number">Nomor Telepon</label>
+                                    <input type="tel" id="phone_number" name="phone_number" placeholder="08xxxxxxxxxx" required>
+                                </div>
+                            <% } else if (product.category === 'PLN') { %>
+                                <div class="form-group">
+                                    <label for="customer_id">ID Pelanggan PLN</label>
+                                    <input type="text" id="customer_id" name="customer_id" placeholder="Masukkan ID Pelanggan PLN" required>
+                                </div>
+                            <% } else if (product.brand === 'DANA' || product.brand === 'OVO' || product.category === 'E-Wallet' || product.category === 'E-Money') { %>
+                                <div class="form-group">
+                                    <label for="phone_number">
+                                        <% if (product.brand === 'DANA') { %>
+                                            Nomor Telepon DANA
+                                        <% } else if (product.brand === 'OVO') { %>
+                                            Nomor Telepon OVO
+                                        <% } else { %>
+                                            Nomor Telepon E-Wallet
+                                        <% } %>
+                                    </label>
+                                    <input type="tel" id="phone_number" name="phone_number" placeholder="08xxxxxxxxxx" required>
+                                </div>
                             <% } %>
-                            <div class="denomination-grid">
-                                <% groupedDenominations[category].forEach(denom => { %>
-                                    <div class="denomination-item" data-name="<%= denom.product_name %>" data-price="<%= denom.selling_price %>">
+                             <% if (product.category === 'Games') { %>
+                                 <p class="form-note">
+                                     <i class="fas fa-info-circle"></i>
+                                     <!-- VOUCHER GAMES -->
+                                     <% if ((product.name && (product.name.toLowerCase().includes('garena') || product.name.toLowerCase().includes('shell'))) || (product.brand && (product.brand.toLowerCase().includes('garena') || product.brand.toLowerCase().includes('shell')))) { %>
+                                         Masukkan nomor HP yang terdaftar di akun Garena Anda. Voucher akan dikirim ke akun tersebut
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('steam') || product.name.toLowerCase().includes('wallet'))) || (product.brand && product.brand.toLowerCase().includes('steam'))) { %>
+                                         Masukkan Steam ID atau email yang terdaftar di akun Steam Anda
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('google play') || product.name.toLowerCase().includes('play store'))) || (product.brand && product.brand.toLowerCase().includes('google'))) { %>
+                                         Masukkan email Google yang terdaftar di Google Play Store
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('itunes') || product.name.toLowerCase().includes('app store') || product.name.toLowerCase().includes('apple'))) || (product.brand && product.brand.toLowerCase().includes('apple'))) { %>
+                                         Masukkan Apple ID yang terdaftar di App Store
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('playstation') || product.name.toLowerCase().includes('psn'))) || (product.brand && product.brand.toLowerCase().includes('playstation'))) { %>
+                                         Masukkan PSN ID atau email yang terdaftar di PlayStation Network
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('xbox') || product.name.toLowerCase().includes('microsoft'))) || (product.brand && product.brand.toLowerCase().includes('xbox'))) { %>
+                                         Masukkan Xbox Gamertag atau email Microsoft yang terdaftar
+                                     <!-- DIRECT TOP-UP GAMES -->
+                                     <% } else if (product.name && (product.name.toLowerCase().includes('mobile legends') || product.name.toLowerCase().includes('mlbb') || product.name.toLowerCase().includes('ml'))) { %>
+                                         Buka profil → User ID dan Zone ID terlihat di pojok kanan atas. Format: 123456789(1234). User ID: 8-10 digit, Zone ID: 4-6 digit
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('free fire') || product.name.toLowerCase().includes('ff'))) || (product.brand && product.brand.toLowerCase().includes('free fire'))) { %>
+                                         Buka profil → Player ID terlihat di bawah nama karakter Anda (8-12 digit angka)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('pubg') || product.name.toLowerCase().includes('playerunknown') || product.name.toLowerCase().includes('bgmi'))) || (product.brand && (product.brand.toLowerCase().includes('pubg') || product.brand.toLowerCase().includes('battlegrounds')))) { %>
+                                         Buka profil → Player ID terlihat di bagian atas profil (10-12 digit angka)
+                                     <% } else if (product.name && (product.name.toLowerCase().includes('genshin') || product.name.toLowerCase().includes('honkai') || product.name.toLowerCase().includes('hsr'))) { %>
+                                         Buka Paimon Menu → UID terlihat di pojok kanan bawah layar (8-10 digit). Server opsional
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('valorant') || product.name.toLowerCase().includes('riot'))) || (product.brand && (product.brand.toLowerCase().includes('valorant') || product.brand.toLowerCase().includes('riot')))) { %>
+                                         Riot ID format: NamaPlayer#Tag (contoh: JohnDoe#1234). Tag 3-5 karakter alfanumerik
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('call of duty') || product.name.toLowerCase().includes('cod') || product.name.toLowerCase().includes('warzone'))) || (product.brand && (product.brand.toLowerCase().includes('call of duty') || product.brand.toLowerCase().includes('cod')))) { %>
+                                         Buka profil → Player ID terlihat di bagian profil (10-20 digit angka)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('arena of valor') || product.name.toLowerCase().includes('aov') || product.name.toLowerCase().includes('liên quân'))) || (product.brand && (product.brand.toLowerCase().includes('arena of valor') || product.brand.toLowerCase().includes('aov')))) { %>
+                                         Buka profil → Player ID terlihat di bagian profil (8-12 digit angka)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('point blank') || product.name.toLowerCase().includes('pb'))) || (product.brand && (product.brand.toLowerCase().includes('point blank') || product.brand.toLowerCase().includes('pb')))) { %>
+                                         Username adalah nama karakter yang digunakan untuk login
+                                     <% } else if (product.name && (product.name.toLowerCase().includes('ragnarok') || product.name.toLowerCase().includes('rom'))) { %>
+                                         Nama karakter terlihat di atas kepala karakter. Pilih server yang sesuai
+                                     <!-- SUPERCELL GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('clash of clans') || product.name.toLowerCase().includes('coc'))) || (product.brand && product.brand.toLowerCase().includes('clash of clans'))) { %>
+                                         Buka profil → Player Tag terlihat di bawah nama pemain (format: #ABC123)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('clash royale') || product.name.toLowerCase().includes('cr'))) || (product.brand && product.brand.toLowerCase().includes('clash royale'))) { %>
+                                         Buka profil → Player Tag terlihat di bawah nama pemain (format: #ABC123)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('brawl stars') || product.name.toLowerCase().includes('bs'))) || (product.brand && product.brand.toLowerCase().includes('brawl stars'))) { %>
+                                         Buka profil → Player Tag terlihat di bawah nama pemain (format: #ABC123)
+                                     <!-- RIOT GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('wild rift') || product.name.toLowerCase().includes('lol'))) || (product.brand && product.brand.toLowerCase().includes('wild rift'))) { %>
+                                         Riot ID format: NamaPlayer#Tag (contoh: JohnDoe#1234). Tag 3-5 karakter alfanumerik
+                                     <!-- OTHER POPULAR GAMES -->
+                                     <% } else if ((product.name && product.name.toLowerCase().includes('roblox')) || (product.brand && product.brand.toLowerCase().includes('roblox'))) { %>
+                                         Masukkan username Roblox Anda (bukan display name)
+                                     <% } else if ((product.name && product.name.toLowerCase().includes('minecraft')) || (product.brand && product.brand.toLowerCase().includes('minecraft'))) { %>
+                                         Username Minecraft Java Edition (bukan Bedrock Edition)
+                                     <% } else if ((product.name && product.name.toLowerCase().includes('fortnite')) || (product.brand && product.brand.toLowerCase().includes('fortnite'))) { %>
+                                         Username Epic Games yang digunakan untuk login Fortnite
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('among us') || product.name.toLowerCase().includes('amongus'))) || (product.brand && product.brand.toLowerCase().includes('among us'))) { %>
+                                         Nama pemain yang ditampilkan dalam game Among Us
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('stumble guys') || product.name.toLowerCase().includes('stumbleguys'))) || (product.brand && product.brand.toLowerCase().includes('stumble guys'))) { %>
+                                         Buka profil → Player ID terlihat di bagian profil (8-12 digit angka)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('higgs domino') || product.name.toLowerCase().includes('domino'))) || (product.brand && product.brand.toLowerCase().includes('higgs'))) { %>
+                                         Buka profil → User ID terlihat di bagian atas profil (8-12 digit angka)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('8 ball pool') || product.name.toLowerCase().includes('8ball'))) || (product.brand && product.brand.toLowerCase().includes('8 ball'))) { %>
+                                         Buka profil → Unique ID terlihat di bagian profil (format: 123-456-789)
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('lords mobile') || product.name.toLowerCase().includes('lordsmobile'))) || (product.brand && product.brand.toLowerCase().includes('lords mobile'))) { %>
+                                         Buka profil → Player ID dan Kingdom terlihat di bagian profil
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('state of survival') || product.name.toLowerCase().includes('sos'))) || (product.brand && product.brand.toLowerCase().includes('state of survival'))) { %>
+                                         Buka profil → Player ID dan State ID terlihat di bagian profil
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('rise of kingdoms') || product.name.toLowerCase().includes('rok'))) || (product.brand && product.brand.toLowerCase().includes('rise of kingdoms'))) { %>
+                                         Buka profil → Governor ID dan Kingdom terlihat di bagian profil
+                                     <!-- BOARD GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('ludo king') || product.name.toLowerCase().includes('ludo'))) || (product.brand && product.brand.toLowerCase().includes('ludo'))) { %>
+                                         Buka profil → User ID terlihat di bagian atas profil
+                                     <!-- MOBA GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('heroes evolved') || product.name.toLowerCase().includes('he'))) || (product.brand && product.brand.toLowerCase().includes('heroes evolved'))) { %>
+                                         Buka profil → Player ID terlihat di bagian informasi akun
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('heroes of newerth') || product.name.toLowerCase().includes('hon'))) || (product.brand && product.brand.toLowerCase().includes('heroes of newerth'))) { %>
+                                         Username yang digunakan untuk login ke game
+                                     <!-- RACING GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('speed drifters') || product.name.toLowerCase().includes('speed'))) || (product.brand && product.brand.toLowerCase().includes('speed drifters'))) { %>
+                                         Buka profil → Player ID terlihat di bagian informasi akun
+                                     <!-- CARD GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('uno') || product.name.toLowerCase().includes('card'))) || (product.brand && product.brand.toLowerCase().includes('uno'))) { %>
+                                         Username yang digunakan untuk login ke game
+                                     <!-- SIMULATION GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('township') || product.name.toLowerCase().includes('town'))) || (product.brand && product.brand.toLowerCase().includes('township'))) { %>
+                                         Buka pengaturan → Player ID terlihat di bagian informasi akun
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('hay day') || product.name.toLowerCase().includes('hayday'))) || (product.brand && product.brand.toLowerCase().includes('hay day'))) { %>
+                                         Buka pengaturan → Player Tag terlihat di bagian atas (dimulai dengan #)
+                                     <!-- PUZZLE GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('candy crush') || product.name.toLowerCase().includes('candy'))) || (product.brand && product.brand.toLowerCase().includes('candy crush'))) { %>
+                                         Buka profil → User ID terlihat di bagian informasi akun
+                                     <!-- FIGHTING GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('tekken') || product.name.toLowerCase().includes('street fighter'))) || (product.brand && (product.brand.toLowerCase().includes('tekken') || product.brand.toLowerCase().includes('street fighter')))) { %>
+                                         Buka profil → Fighter ID terlihat di bagian informasi akun
+                                     <!-- SPORTS GAMES -->
+                                     <% } else if ((product.name && (product.name.toLowerCase().includes('fifa') || product.name.toLowerCase().includes('pes') || product.name.toLowerCase().includes('efootball'))) || (product.brand && (product.brand.toLowerCase().includes('fifa') || product.brand.toLowerCase().includes('pes')))) { %>
+                                         Buka profil → Player ID terlihat di bagian informasi akun
+                                     <% } else { %>
+                                         Untuk menemukan ID pemain, buka profil akun game Anda
+                                     <% } %>
+                                 </p>
+                             <% } else if (product.category === 'Pulsa' || product.category === 'Paket Data') { %>
+                                 <p class="form-note">
+                                     <i class="fas fa-info-circle"></i>
+                                     Masukkan nomor telepon yang aktif dan benar
+                                 </p>
+                             <% } else if (product.category === 'PLN') { %>
+                                 <p class="form-note">
+                                     <i class="fas fa-info-circle"></i>
+                                     ID Pelanggan PLN dapat ditemukan di tagihan listrik Anda
+                                 </p>
+                             <% } else if (product.brand === 'DANA' || product.brand === 'OVO' || product.category === 'E-Wallet' || product.category === 'E-Money') { %>
+                                 <p class="form-note">
+                                     <i class="fas fa-info-circle"></i>
+                                     <% if (product.brand === 'DANA') { %>
+                                         Masukkan nomor telepon yang terdaftar di akun DANA Anda
+                                     <% } else if (product.brand === 'OVO') { %>
+                                         Masukkan nomor telepon yang terdaftar di akun OVO Anda
+                                     <% } else { %>
+                                         Masukkan nomor telepon yang terdaftar di akun e-wallet Anda
+                                     <% } %>
+                                 </p>
+                             <% } %>
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-phone"></i>
+                                Detail Kontak
+                            </h3>
+                            <div class="form-group">
+                                <label for="phone">Nomor WhatsApp</label>
+                                <input type="tel" id="phone" name="phone" placeholder="Untuk menerima bukti transaksi" required>
+                            </div>
+                            <p class="form-note">
+                                <i class="fas fa-info-circle"></i>
+                                Bukti pembelian akan dikirimkan ke WhatsApp
+                            </p>
+                        </div>
+                    </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="right-column">
+                <!-- Denomination Selection -->
+                <div class="denomination-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-gem"></i>
+                        Pilih Nominal
+                    </h3>
+                    <% sortedGroupNames.forEach(category => { %>
+                        <% if (groupCount > 1) { %>
+                            <h4 class="denomination-category-title">
+                                <i class="fas fa-tags"></i>
+                                <%= category %>
+                            </h4>
+                        <% } %>
+                        <div class="denomination-grid">
+                            <% groupedDenominations[category].forEach(denom => { %>
+                                <div class="denomination-item" data-price="<%= denom.selling_price %>" data-name="<%= denom.product_name %>">
+                                    <div class="denomination-icon">
+                                        <i class="fas fa-gem"></i>
+                                    </div>
+                                    <div class="denomination-details">
                                         <div class="denomination-name"><%= denom.product_name %></div>
                                         <div class="denomination-price">Rp <%= denom.selling_price.toLocaleString('id-ID') %></div>
                                     </div>
-                                <% }) %>
-                            </div>
-                        <% }) %>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% }) %>
+                </div>
+
+                <div class="checkout-section">
+                    <div class="total-price">
+                        <i class="fas fa-calculator"></i>
+                        Total: Rp <span id="total-amount">0</span>
                     </div>
-                </section>
+                    <button type="submit" class="buy-button">
+                        <i class="fas fa-shopping-cart"></i>
+                        Beli Sekarang
+                    </button>
+                </div>
             </div>
             
             <input type="hidden" name="product" id="selected-product-name">
-            <input type="hidden" name="payment" value="QRIS">
-
-            <div class="checkout-section card">
-                <div class="order-summary">
-                    <span>Total</span>
-                    <span id="total-price">Rp 0</span>
-                </div>
-                <button type="submit" class="btn-order">Beli Sekarang</button>
-            </div>
-        </form>
+            <input type="hidden" name="payment" value="MIDTRANS">
+            </form>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const denominationItems = document.querySelectorAll('.denomination-item');
-            const selectedProductNameInput = document.getElementById('selected-product-name');
-            const totalPriceDisplay = document.getElementById('total-price');
+            const totalAmountElement = document.getElementById('total-amount');
+            const selectedProductInput = document.getElementById('selected-product-name');
+            let selectedPrice = 0;
+            let selectedProductName = '';
 
             denominationItems.forEach(item => {
-                item.addEventListener('click', () => {
+                item.addEventListener('click', function() {
+                    // Remove selected class from all items
                     denominationItems.forEach(i => i.classList.remove('selected'));
-                    item.classList.add('selected');
-                    // PERUBAHAN DI SINI: Ambil harga dari 'data-price' yang sudah harga jual
-                    const price = parseInt(item.dataset.price);
-                    selectedProductNameInput.value = item.dataset.name;
-                    totalPriceDisplay.innerText = `Rp ${price.toLocaleString('id-ID')}`;
+                    
+                    // Add selected class to clicked item
+                    this.classList.add('selected');
+                    
+                    // Update price and product name
+                    selectedPrice = parseInt(this.dataset.price);
+                    selectedProductName = this.dataset.name;
+                    
+                    // Update display
+                    totalAmountElement.textContent = selectedPrice.toLocaleString('id-ID');
+                    selectedProductInput.value = selectedProductName;
                 });
             });
 
-            document.getElementById('order-form').addEventListener('submit', (e) => {
-                if (!selectedProductNameInput.value) {
+            // Form submission validation
+            document.getElementById('order-form').addEventListener('submit', function(e) {
+                if (selectedPrice === 0) {
                     e.preventDefault();
                     alert('Silakan pilih nominal terlebih dahulu!');
                 }
             });
+            
+            // Search functionality for products (if implemented)
+            const searchInput = document.getElementById('search-products');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    denominationItems.forEach(item => {
+                        const productName = item.dataset.name.toLowerCase();
+                        if (productName.includes(searchTerm)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            }
         });
     </script>
 </body>

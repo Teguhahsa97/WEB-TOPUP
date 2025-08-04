@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Banner - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --admin-bg-primary: #0f0f23;
+            --admin-bg-secondary: #1a1a2e;
+            --admin-bg-tertiary: #16213e;
+            --admin-accent-primary: #4f46e5;
+            --admin-accent-secondary: #7c3aed;
+            --admin-text-primary: #ffffff;
+            --admin-text-secondary: #a1a1aa;
+            --admin-border: #374151;
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-info: #3b82f6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--admin-bg-primary) 0%, var(--admin-bg-secondary) 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--admin-text-primary);
+        }
+        
+        .admin-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .admin-card {
+            background: var(--admin-bg-secondary);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--admin-border);
+            overflow: hidden;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            color: var(--admin-text-primary);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            padding: 40px;
+        }
+        
+        .banner-preview {
+            border: 2px dashed var(--admin-border);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: var(--admin-bg-tertiary);
+        }
+        
+        .banner-preview img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .upload-section {
+            background: var(--admin-bg-tertiary);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--admin-border);
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            color: var(--admin-text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
+            color: var(--admin-text-primary);
+            filter: brightness(1.1);
+        }
+        
+        .btn-danger-custom {
+            background: linear-gradient(135deg, var(--admin-danger) 0%, #dc2626 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            color: var(--admin-text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-danger-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+            color: var(--admin-text-primary);
+            filter: brightness(1.1);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid var(--admin-border);
+            padding: 12px 15px;
+            background: var(--admin-bg-primary);
+            color: var(--admin-text-primary);
+        }
+        
+        .form-control:focus {
+            border-color: var(--admin-accent-primary);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+            background: var(--admin-bg-primary);
+            color: var(--admin-text-primary);
+        }
+        
+        .form-label {
+            color: var(--admin-text-primary);
+            font-weight: 600;
+        }
+        
+        .form-text {
+            color: var(--admin-text-secondary);
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid var(--admin-border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: var(--admin-text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(79, 70, 229, 0.3);
+            color: var(--admin-text-primary);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <a href="/admin/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left me-2"></i>Kembali ke Dashboard
+    </a>
+    
+    <div class="admin-container">
+        <div class="admin-card">
+            <div class="admin-header">
+                <h1><i class="fas fa-image me-3"></i>Kelola Banner</h1>
+                <p class="mb-0">Upload dan kelola banner untuk halaman utama</p>
+            </div>
+            
+            <div class="admin-content">
+                <!-- Upload New Banner -->
+                <div class="upload-section">
+                    <h4 class="mb-3"><i class="fas fa-upload me-2"></i>Upload Banner Baru</h4>
+                    <form id="bannerUploadForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="bannerFile" class="form-label">Pilih File Banner (Bisa Multiple)</label>
+                            <input type="file" class="form-control" id="bannerFile" name="banners" accept="image/*" multiple>
+                            <div class="form-text">Format yang didukung: JPG, PNG, GIF. Ukuran maksimal: 5MB per file. Nama file bebas.</div>
+                        </div>
+                        <button type="submit" class="btn btn-custom">
+                            <i class="fas fa-upload me-2"></i>Upload Banner(s)
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Current Banners -->
+                <div class="banner-preview">
+                    <h4 class="mb-3">Banner yang Tersedia</h4>
+                    <div id="bannersList">
+                        <% if (banners && banners.length > 0) { %>
+                            <div class="row">
+                                <% banners.forEach(function(banner, index) { %>
+                                    <div class="col-md-6 col-lg-4 mb-3">
+                                        <div class="card" style="background: var(--admin-bg-primary); border: 1px solid var(--admin-border); border-radius: 15px; overflow: hidden;">
+                                            <img src="<%= banner.path %>" class="card-img-top" alt="<%= banner.filename %>" style="height: 200px; object-fit: cover;">
+                                            <div class="card-body" style="background: var(--admin-bg-primary);">
+                                                <h6 class="card-title" style="color: var(--admin-text-primary); margin-bottom: 15px;"><%= banner.filename %></h6>
+                                                <button class="btn btn-danger-custom btn-sm" onclick="deleteBanner('<%= banner.filename %>')">
+                                                    <i class="fas fa-trash me-1"></i>Hapus
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            </div>
+                        <% } else { %>
+                            <div class="text-center" style="color: var(--admin-text-secondary);">
+                                <i class="fas fa-image fa-3x mb-3" style="color: var(--admin-text-secondary);"></i>
+                                <p>Tidak ada banner yang diupload</p>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Banner upload form
+        document.getElementById('bannerUploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            const fileInput = document.getElementById('bannerFile');
+            
+            if (!fileInput.files.length) {
+                alert('Pilih file banner terlebih dahulu!');
+                return;
+            }
+            
+            // Append multiple files
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append('banners', fileInput.files[i]);
+            }
+            
+            try {
+                const response = await fetch('/admin/upload-banners', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`${result.uploadedCount} banner berhasil diupload!`);
+                    location.reload();
+                } else {
+                    alert('Gagal upload banner: ' + result.message);
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            }
+        });
+        
+        // Delete banner function
+        async function deleteBanner(filename) {
+            if (!confirm(`Apakah Anda yakin ingin menghapus banner "${filename}"?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/admin/delete-banner', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Banner berhasil dihapus!');
+                    location.reload();
+                } else {
+                    alert('Gagal menghapus banner: ' + result.message);
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

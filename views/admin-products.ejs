@@ -5,74 +5,708 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pengaturan Produk</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; vertical-align: middle;}
-        th { background-color: #f2f2f2; }
-        .sync-form button { padding: 10px 15px; background-color: #1a237e; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px;}
-        .toggle-form button { padding: 5px 10px; width: 100px; border: none; border-radius: 5px; color: white; cursor: pointer; }
-        .toggle-form .active { background-color: #4CAF50; /* Green */ }
-        .toggle-form .inactive { background-color: #f44336; /* Red */ }
-        .image-form { display: flex; gap: 5px; }
-        .image-form input { flex-grow: 1; }
+        /* Modern Dark Admin Dashboard Styles */
+        :root {
+            --admin-bg-primary: #0f0f23;
+            --admin-bg-secondary: #1a1a2e;
+            --admin-bg-tertiary: #16213e;
+            --admin-bg-card: #1e1e3f;
+            --admin-accent-primary: #8b5cf6;
+            --admin-accent-secondary: #a855f7;
+            --admin-text-primary: #ffffff;
+            --admin-text-secondary: #94a3b8;
+            --admin-border-color: rgba(139, 92, 246, 0.2);
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-info: #3b82f6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--admin-bg-primary) 0%, var(--admin-bg-secondary) 50%, var(--admin-bg-tertiary) 100%);
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--admin-text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 250px;
+            background: var(--admin-bg-card);
+            border-right: 1px solid var(--admin-border-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--admin-border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--admin-bg-tertiary);
+        }
+        
+        .admin-sidebar-header h1 {
+            font-size: 1.2rem;
+            margin: 0;
+            font-weight: 700;
+            color: var(--admin-text-primary);
+        }
+        
+        .admin-sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+        }
+        
+        .admin-nav {
+            padding: 20px 0;
+        }
+        
+        .admin-nav-item {
+            margin: 8px 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--admin-text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-nav-item:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--admin-text-primary);
+            transform: translateX(5px);
+            border: 1px solid var(--admin-border-color);
+        }
+        
+        .admin-nav-item.active {
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+        }
+        
+        .admin-nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+            background: transparent;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--admin-border-color);
+            background: var(--admin-bg-card);
+            border-radius: 16px;
+            padding: 25px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--admin-text-primary);
+            background: linear-gradient(135deg, var(--admin-accent-primary), var(--admin-accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card {
+            background: var(--admin-bg-card);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--admin-border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--admin-border-color);
+        }
+        
+        .card-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--admin-text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-header h2 i {
+            color: var(--admin-accent-primary);
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 20px;
+            background: var(--admin-bg-tertiary);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td { 
+            padding: 18px 20px; 
+            border: 1px solid var(--admin-border-color); 
+            text-align: left; 
+            vertical-align: middle;
+        }
+        
+        th { 
+            background: linear-gradient(135deg, var(--admin-bg-secondary), var(--admin-bg-tertiary)); 
+            font-weight: 600;
+            color: var(--admin-text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            color: var(--admin-text-secondary);
+            background: var(--admin-bg-card);
+        }
+        
+        tbody tr:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+        
+        tbody tr:hover td {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--admin-text-primary);
+        }
+        
+        .sync-form button { 
+            padding: 15px 25px; 
+            background: linear-gradient(135deg, var(--admin-accent-primary), var(--admin-accent-secondary)); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sync-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .toggle-form button { 
+            padding: 10px 18px; 
+            width: 110px; 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-form .active { 
+            background: linear-gradient(135deg, var(--admin-success), #059669);
+        }
+        
+        .toggle-form .inactive { 
+            background: linear-gradient(135deg, var(--admin-danger), #dc2626);
+        }
+        
+        .toggle-form button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .image-form { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center;
+        }
+        
+        .image-form input { 
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid var(--admin-border-color);
+            background: var(--admin-bg-secondary);
+            color: var(--admin-text-primary);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .image-form input:focus {
+            outline: none;
+            border-color: var(--admin-accent-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .image-form button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, var(--admin-accent-primary), var(--admin-accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+        
+        .image-form button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, var(--admin-success), #059669);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .success-message i {
+            font-size: 1.2rem;
+        }
+        
+        /* Search and Filter Styles */
+        input[type="text"], select {
+            padding: 12px 16px;
+            border: 1px solid var(--admin-border-color);
+            border-radius: 10px;
+            background: var(--admin-bg-secondary);
+            color: var(--admin-text-primary);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--admin-accent-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        #searchResults {
+            background: var(--admin-bg-tertiary);
+            border: 1px solid var(--admin-border-color);
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 70px;
+            }
+            
+            .admin-sidebar-header h1,
+            .admin-nav-item span {
+                display: none;
+            }
+            
+            .admin-content {
+                margin-left: 70px;
+                padding: 20px 15px;
+            }
+            
+            .admin-header {
+                padding: 20px;
+            }
+            
+            .admin-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 12px 8px;
+            }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>⚙️ Pengaturan Produk</h1>
-        <p><a href="/admin/dashboard" style="color: white;">Kembali ke Dashboard</a></p>
-    </header>
-    <main class="container">
-        <div class="card">
-            <h2>Sinkronisasi dengan Digiflazz</h2>
-            <p>Klik tombol di bawah untuk mengambil daftar produk terbaru dari Digiflazz. Produk baru akan ditambahkan ke daftar di bawah dalam keadaan nonaktif.</p>
-            <form class="sync-form" action="/admin/sync-digiflazz" method="POST">
-                <button type="submit">Sinkronkan Sekarang</button>
-            </form>
-        </div>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <div class="admin-sidebar-logo">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h1>Web TopUp Admin</h1>
+            </div>
+            
+            <nav class="admin-nav">
+                <a href="/admin/dashboard" class="admin-nav-item">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/products" class="admin-nav-item active">
+                    <i class="fas fa-box"></i>
+                    <span>Produk</span>
+                </a>
+                <a href="/admin/banner" class="admin-nav-item">
+                    <i class="fas fa-image"></i>
+                    <span>Banner Logo</span>
+                </a>
 
-        <div class="card">
-            <h2>Daftar Produk</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Brand</th>
-                        <th>Kategori</th>
-                        <th>Gambar</th>
-                        <th>Status Aktif</th>
-                        <th>Status Populer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% products.forEach(product => { %>
-                        <tr>
-                            <td><strong><%= product.brand %></strong></td>
-                            <td><%= product.category %></td>
-                            <td>
-                                <form action="/admin/products/update-image/<%= product.id %>" method="POST" class="image-form">
-                                    <input type="text" name="imageUrl" placeholder="URL Gambar" value="<%= product.imageUrl || '' %>">
-                                    <button type="submit">Simpan</button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="/admin/products/toggle-active/<%= product.id %>" method="POST" class="toggle-form">
-                                    <button type="submit" class="<%= product.isActive ? 'active' : 'inactive' %>">
-                                        <%= product.isActive ? 'Aktif' : 'Nonaktif' %>
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <form action="/admin/products/toggle-popular/<%= product.id %>" method="POST" class="toggle-form">
-                                    <button type="submit" class="<%= product.isPopular ? 'active' : 'inactive' %>">
-                                        <%= product.isPopular ? 'Populer' : 'Biasa' %>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
+                <a href="/admin/logout" class="admin-nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
         </div>
-    </main>
+        <!-- Main Content -->
+        <div class="admin-content">
+            <div class="admin-header">
+                <h1>Pengaturan Produk</h1>
+            </div>
+            
+            <!-- Success Message -->
+            <% if (typeof query !== 'undefined' && query.withdraw === 'success') { %>
+                <div class="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    Permintaan pencairan berhasil diajukan! Tim akan memproses dalam 1-3 hari kerja.
+                </div>
+            <% } %>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-sync-alt"></i> Sinkronisasi dengan Digiflazz</h2>
+                </div>
+                <p>Klik tombol di bawah untuk mengambil daftar produk terbaru dari Digiflazz. Produk baru akan ditambahkan ke daftar di bawah dalam keadaan nonaktif.</p>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <form class="sync-form" action="/admin/sync-digiflazz" method="POST" style="margin: 0;">
+                        <button type="submit"><i class="fas fa-download"></i> Sinkronkan Sekarang</button>
+                    </form>
+                    <form class="sync-form" action="/admin/products/activate-all" method="POST" style="margin: 0;">
+                        <button type="submit" style="background: linear-gradient(90deg, #28a745, #20c997);"><i class="fas fa-toggle-on"></i> Aktifkan Semua Produk</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Fitur Search Produk -->
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-search"></i> Cari Produk & Game</h2>
+                </div>
+                <p>Cari dan filter produk berdasarkan kategori, brand, atau status untuk manajemen yang lebih mudah.</p>
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="searchInput" placeholder="Cari produk, brand, atau kategori..." style="padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); width: 300px; font-size: 14px;">
+                        <select id="categoryFilter" style="padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px;">
+                            <option value="">Semua Kategori</option>
+                            <option value="Games">Games</option>
+                            <option value="Pulsa">Pulsa</option>
+                            <option value="Paket Data">Paket Data</option>
+                            <option value="PLN">PLN</option>
+                            <option value="E-Wallet">E-Wallet</option>
+                            <option value="E-Money">E-Money</option>
+                        </select>
+                        <select id="statusFilter" style="padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px;">
+                            <option value="">Semua Status</option>
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Nonaktif</option>
+                            <option value="popular">Populer</option>
+                        </select>
+                        <button onclick="clearFilters()" style="padding: 12px 20px; background: linear-gradient(90deg, #6c757d, #5a6268); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;"><i class="fas fa-times"></i> Reset</button>
+                    </div>
+                </div>
+                <div id="searchResults" style="margin-top: 15px; padding: 10px; background: var(--bg-secondary); border-radius: 8px; display: none;">
+                    <p style="margin: 0; color: var(--text-secondary); font-size: 14px;"><i class="fas fa-info-circle"></i> Hasil pencarian akan ditampilkan di tabel di bawah</p>
+                </div>
+            </div>
+
+            <!-- Daftar Produk per Kategori -->
+            <% 
+                const categories = [...new Set(products.map(p => p.category))];
+                const gameCategories = ['Games'];
+                const otherCategories = categories.filter(cat => !gameCategories.includes(cat));
+            %>
+            
+            <!-- Games Section -->
+            <% if (products.some(p => p.category === 'Games')) { %>
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-gamepad"></i> Produk Games</h2>
+                    </div>
+                    <table>
+                    <thead>
+                        <tr>
+                            <th>Brand</th>
+                            <th>Kategori</th>
+                            <th>Gambar</th>
+                            <th>Status Aktif</th>
+                            <th>Status Populer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.filter(p => p.category === 'Games').forEach(product => { %>
+                            <tr>
+                                <td><strong><%= product.brand %></strong></td>
+                                <td><%= product.category %></td>
+                                <td>
+                                    <form action="/admin/products/update-image/<%= product.id %>" method="POST" class="image-form">
+                                        <input type="text" name="imageUrl" placeholder="URL Gambar" value="<%= product.imageUrl || '' %>">
+                                        <button type="submit">Simpan</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/products/toggle-active/<%= product.id %>" method="POST" class="toggle-form">
+                                        <button type="submit" class="<%= product.isActive ? 'active' : 'inactive' %>">
+                                            <%= product.isActive ? 'Aktif' : 'Nonaktif' %>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="/admin/products/toggle-popular/<%= product.id %>" method="POST" class="toggle-form">
+                                        <button type="submit" class="<%= product.isPopular ? 'active' : 'inactive' %>">
+                                            <%= product.isPopular ? 'Populer' : 'Biasa' %>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                    </table>
+                </div>
+            <% } %>
+            
+            <!-- Other Categories -->
+            <% otherCategories.forEach(category => { %>
+                <% if (products.some(p => p.category === category)) { %>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-<%= category === 'Pulsa' ? 'mobile-alt' : category === 'Paket Data' ? 'wifi' : category === 'PLN' ? 'bolt' : category === 'E-Wallet' ? 'wallet' : category === 'E-Money' ? 'credit-card' : 'box' %>"></i> Produk <%= category %></h2>
+                        </div>
+                        <table>
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Kategori</th>
+                                <th>Gambar</th>
+                                <th>Status Aktif</th>
+                                <th>Status Populer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% products.filter(p => p.category === category).forEach(product => { %>
+                                <tr>
+                                    <td><strong><%= product.brand %></strong></td>
+                                    <td><%= product.category %></td>
+                                    <td>
+                                        <form action="/admin/products/update-image/<%= product.id %>" method="POST" class="image-form">
+                                            <input type="text" name="imageUrl" placeholder="URL Gambar" value="<%= product.imageUrl || '' %>">
+                                            <button type="submit">Simpan</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/admin/products/toggle-active/<%= product.id %>" method="POST" class="toggle-form">
+                                            <button type="submit" class="<%= product.isActive ? 'active' : 'inactive' %>">
+                                                <%= product.isActive ? 'Aktif' : 'Nonaktif' %>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/admin/products/toggle-popular/<%= product.id %>" method="POST" class="toggle-form">
+                                            <button type="submit" class="<%= product.isPopular ? 'active' : 'inactive' %>">
+                                                <%= product.isPopular ? 'Populer' : 'Biasa' %>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                        </table>
+                    </div>
+                <% } %>
+            <% }) %>
+        </div>
+    </div>
+
+    <script>
+        // Search and Filter Functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const searchResults = document.getElementById('searchResults');
+            const tables = document.querySelectorAll('table');
+            
+            function filterProducts() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categoryFilter.value;
+                const selectedStatus = statusFilter.value;
+                
+                let totalVisible = 0;
+                
+                tables.forEach(table => {
+                    const tbody = table.querySelector('tbody');
+                    if (!tbody) return;
+                    
+                    const rows = tbody.querySelectorAll('tr');
+                    let visibleInTable = 0;
+                    
+                    rows.forEach(row => {
+                        const brand = row.cells[0]?.textContent.toLowerCase() || '';
+                        const category = row.cells[1]?.textContent || '';
+                        const activeButton = row.querySelector('.toggle-form .active, .toggle-form .inactive');
+                        const popularButton = row.querySelectorAll('.toggle-form button')[1];
+                        
+                        let isActive = activeButton?.textContent.includes('Aktif');
+                        let isPopular = popularButton?.textContent.includes('Populer');
+                        
+                        // Search filter
+                        const matchesSearch = !searchTerm || 
+                            brand.includes(searchTerm) || 
+                            category.toLowerCase().includes(searchTerm);
+                        
+                        // Category filter
+                        const matchesCategory = !selectedCategory || category === selectedCategory;
+                        
+                        // Status filter
+                        let matchesStatus = true;
+                        if (selectedStatus === 'active') {
+                            matchesStatus = isActive;
+                        } else if (selectedStatus === 'inactive') {
+                            matchesStatus = !isActive;
+                        } else if (selectedStatus === 'popular') {
+                            matchesStatus = isPopular;
+                        }
+                        
+                        const shouldShow = matchesSearch && matchesCategory && matchesStatus;
+                        
+                        if (shouldShow) {
+                            row.style.display = '';
+                            visibleInTable++;
+                            totalVisible++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                    
+                    // Hide/show table based on visible rows
+                    const card = table.closest('.card');
+                    if (card && visibleInTable === 0) {
+                        card.style.display = 'none';
+                    } else if (card) {
+                        card.style.display = 'block';
+                    }
+                });
+                
+                // Show search results info
+                if (searchTerm || selectedCategory || selectedStatus) {
+                    searchResults.style.display = 'block';
+                    searchResults.innerHTML = `
+                        <p style="margin: 0; color: var(--admin-text-secondary); font-size: 14px;">
+                            <i class="fas fa-search"></i> 
+                            Menampilkan ${totalVisible} produk dari hasil pencarian
+                            ${searchTerm ? `untuk "${searchTerm}"` : ''}
+                            ${selectedCategory ? ` dalam kategori "${selectedCategory}"` : ''}
+                            ${selectedStatus ? ` dengan status "${selectedStatus}"` : ''}
+                        </p>
+                    `;
+                } else {
+                    searchResults.style.display = 'none';
+                }
+            }
+            
+            // Event listeners
+            searchInput.addEventListener('input', filterProducts);
+            categoryFilter.addEventListener('change', filterProducts);
+            statusFilter.addEventListener('change', filterProducts);
+        }
+        
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('searchResults').style.display = 'none';
+            
+            // Show all rows and tables
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => {
+                const tbody = table.querySelector('tbody');
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        row.style.display = '';
+                    });
+                }
+                
+                const card = table.closest('.card');
+                if (card) {
+                    card.style.display = 'block';
+                }
+            });
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSearch();
+        });
+    </script>
 </body>
 </html>

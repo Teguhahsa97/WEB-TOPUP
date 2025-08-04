@@ -3,33 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice <%= order.trxId %> - GASS Topup</title>
+    <title>Invoice <%= order.trxId %> - AHSASTORE</title>
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        .invoice-box { padding: 30px; }
-        .invoice-header { text-align: center; margin-bottom: 30px; }
-        .invoice-header h1 { font-size: 2rem; color: var(--text-primary); margin: 0; }
-        .invoice-header p { color: var(--text-secondary); }
-        .invoice-details table { width: 100%; text-align: left; }
-        .invoice-details th, .invoice-details td { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
-        .invoice-details th { color: var(--text-secondary); font-weight: 500; }
-        .invoice-details td { font-weight: 600; text-align: right; }
-        .invoice-status { font-weight: 700; }
-        .status-success { color: var(--success-color); }
-        .status-pending { color: #f0b90b; }
-        .status-failed { color: var(--danger-color); }
-        .status-processing { color: var(--accent-primary); }
-        .invoice-actions { text-align: center; margin-top: 30px; }
-        .invoice-actions a { display: inline-block; background-color: var(--accent-primary); color: var(--bg-primary); padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --accent-primary: #6366f1;
+            --accent-secondary: #06b6d4;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --border-color: #333333;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-dark: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span {
+            color: var(--accent-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            padding-top: 120px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .invoice-box { 
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .invoice-header { 
+            text-align: center; 
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .invoice-header h1 { 
+            font-size: 2.5rem; 
+            color: var(--text-primary); 
+            margin: 0;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .invoice-header p { 
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .invoice-details table { 
+            width: 100%; 
+            text-align: left;
+            border-collapse: collapse;
+        }
+        
+        .invoice-details th, .invoice-details td { 
+            padding: 20px 0; 
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .invoice-details th { 
+            color: var(--text-secondary); 
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .invoice-details td { 
+            font-weight: 600; 
+            text-align: right;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+        }
+        
+        .invoice-status { 
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-success { 
+            color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-pending { 
+            color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-failed { 
+            color: var(--danger-color);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .status-processing { 
+            color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+        
+        .invoice-actions { 
+            text-align: center; 
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border-color);
+        }
+        
+        .invoice-actions a { 
+            display: inline-block; 
+            background: var(--gradient-primary);
+            color: white;
+            padding: 15px 30px; 
+            border-radius: 12px; 
+            text-decoration: none; 
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .invoice-actions a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+                padding-top: 100px;
+            }
+
+            .invoice-box {
+                padding: 20px;
+            }
+
+            .invoice-header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .navbar .container {
+                padding: 0 1rem;
+            }
+
+            .invoice-details th,
+            .invoice-details td {
+                padding: 15px 0;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="navbar-brand">GASS<span>TOPUP</span></a>
+            <a href="/" class="navbar-brand">AHSA<span>STORE</span></a>
             <ul class="nav-links">
                 <li><a href="/">Beranda</a></li>
-                <li><a href="/cek">Cek Pesanan</a></li>
+                <li><a href="/cek-pesanan">Cek Pesanan</a></li>
             </ul>
         </div>
     </nav>
@@ -37,9 +259,9 @@
         <div class="card invoice-box">
             <div class="invoice-header">
                 <h1>Detail Transaksi</h1>
-                <p>Terima kasih telah bertransaksi di GASS Topup.</p>
+                <p>Terima kasih telah bertransaksi di AHSASTORE</p>
             </div>
-
+            
             <div class="invoice-details">
                 <table>
                     <tr>
@@ -52,28 +274,27 @@
                     </tr>
                     <tr>
                         <th>ID TUJUAN</th>
-                        <td><%= order.productId %></td>
+                        <td><%= order.phone %></td>
                     </tr>
                     <tr>
                         <th>STATUS PEMBAYARAN</th>
                         <td>
-                            <% if (order.paymentStatus === 'SUCCESS') { %><span class="invoice-status status-success">BERHASIL</span>
-                            <% } else if (order.paymentStatus === 'PENDING') { %><span class="invoice-status status-pending">PENDING</span>
-                            <% } else { %><span class="invoice-status status-failed">GAGAL</span><% } %>
+                            <span class="invoice-status <%= order.paymentStatus === 'SUCCESS' ? 'status-success' : order.paymentStatus === 'PENDING' ? 'status-pending' : 'status-failed' %>">
+                                <%= order.paymentStatus === 'SUCCESS' ? 'BERHASIL' : order.paymentStatus === 'PENDING' ? 'PENDING' : 'GAGAL' %>
+                            </span>
                         </td>
                     </tr>
                     <tr>
                         <th>STATUS PENGIRIMAN</th>
                         <td>
-                            <% if (order.fulfillmentStatus === 'SUCCESS') { %><span class="invoice-status status-success">SUKSES</span>
-                            <% } else if (order.fulfillmentStatus === 'PROCESSING') { %><span class="invoice-status status-processing">DIPROSES</span>
-                            <% } else if (order.fulfillmentStatus === 'PENDING') { %><span class="invoice-status status-pending">MENUNGGU</span>
-                            <% } else { %><span class="invoice-status status-failed">GAGAL</span><% } %>
+                            <span class="invoice-status <%= order.fulfillmentStatus === 'SUCCESS' ? 'status-success' : order.fulfillmentStatus === 'PROCESSING' ? 'status-processing' : order.fulfillmentStatus === 'PENDING' ? 'status-pending' : order.fulfillmentStatus === 'FAILED' ? 'status-failed' : 'status-processing' %>">
+                                <%= order.fulfillmentStatus === 'SUCCESS' ? 'BERHASIL' : order.fulfillmentStatus === 'PROCESSING' ? 'DIPROSES' : order.fulfillmentStatus === 'PENDING' ? 'MENUNGGU' : order.fulfillmentStatus === 'FAILED' ? 'GAGAL' : 'DIPROSES' %>
+                            </span>
                         </td>
                     </tr>
                 </table>
             </div>
-
+            
             <div class="invoice-actions">
                 <a href="/">Kembali ke Beranda</a>
             </div>

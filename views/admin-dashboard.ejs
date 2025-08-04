@@ -5,30 +5,600 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; vertical-align: middle;}
-        th { background-color: var(--bg-tertiary); }
-        .status { font-weight: 700; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; text-align: center; }
-        .status-success { color: #2b6131; background-color: rgba(63, 185, 80, 0.2); }
-        .status-pending { color: #b78d0f; background-color: rgba(240, 185, 11, 0.2); }
-        .status-processing { color: #3d7ad6; background-color: rgba(88, 166, 255, 0.2); }
-        .status-failed { color: #a13d3d; background-color: rgba(248, 81, 73, 0.2); }
+        /* Modern Dark Admin Dashboard Styles */
+        :root {
+            --admin-bg-primary: #0f0f23;
+            --admin-bg-secondary: #1a1a2e;
+            --admin-bg-tertiary: #16213e;
+            --admin-bg-card: #1e1e3f;
+            --admin-accent-primary: #8b5cf6;
+            --admin-accent-secondary: #a855f7;
+            --admin-text-primary: #ffffff;
+            --admin-text-secondary: #94a3b8;
+            --admin-border-color: rgba(139, 92, 246, 0.2);
+            --admin-success: #10b981;
+            --admin-warning: #f59e0b;
+            --admin-danger: #ef4444;
+            --admin-info: #3b82f6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--admin-bg-primary) 0%, var(--admin-bg-secondary) 50%, var(--admin-bg-tertiary) 100%);
+            margin: 0;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--admin-text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .admin-sidebar {
+            width: 280px;
+            background: var(--admin-bg-card);
+            border-right: 1px solid var(--admin-border-color);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--admin-border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--admin-bg-tertiary);
+        }
+        
+        .admin-sidebar-header h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--admin-text-primary);
+        }
+        
+        .admin-sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+        }
+        
+        .admin-nav {
+            padding: 20px 0;
+        }
+        
+        .admin-nav-item {
+            margin: 8px 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--admin-text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(139, 92, 246, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .admin-nav-item:hover {
+            color: var(--admin-text-primary);
+            transform: translateX(5px);
+            border: 1px solid var(--admin-border-color);
+        }
+        
+        .admin-nav-item:hover::before {
+            opacity: 1;
+        }
+        
+        .admin-nav-item.active {
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            color: var(--admin-text-primary);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+            border: 1px solid var(--admin-border-color);
+        }
+        
+        .admin-nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .admin-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--admin-bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--admin-border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--admin-text-primary);
+        }
+        
+        .admin-header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--admin-bg-card);
+            border: 1px solid var(--admin-border-color);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(139, 92, 246, 0.05);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(139, 92, 246, 0.2);
+            border-color: var(--admin-accent-primary);
+        }
+        
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+        
+        .stat-card-title {
+            font-size: 0.9rem;
+            color: var(--admin-text-secondary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .stat-card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--admin-text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .stat-card-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .stat-total {
+            background: linear-gradient(135deg, var(--admin-info) 0%, #60a5fa 100%);
+        }
+        
+        .stat-success {
+            background: linear-gradient(135deg, var(--admin-success) 0%, #34d399 100%);
+        }
+        
+        .stat-pending {
+            background: linear-gradient(135deg, var(--admin-warning) 0%, #fbbf24 100%);
+        }
+        
+        /* Modern Table Styles */
+        table { 
+            width: 100%; 
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 25px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td { 
+            padding: 18px 20px; 
+            border: none;
+            text-align: left; 
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+        }
+        
+        td {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            transform: scale(1.01);
+        }
+        
+        .status { 
+            font-weight: 700; 
+            padding: 8px 16px; 
+            border-radius: 25px; 
+            font-size: 0.75rem; 
+            text-align: center; 
+            display: inline-block;
+            min-width: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-success { 
+            color: #ffffff; 
+            background: var(--admin-success);
+        }
+        .status-pending { 
+            color: #ffffff; 
+            background: var(--admin-warning);
+        }
+        .status-processing { 
+            color: #ffffff; 
+            background: var(--admin-info);
+        }
+        .status-failed { 
+            color: #ffffff; 
+            background: var(--admin-danger);
+        }
+        
+        /* Card Styles */
+        .card {
+            background: var(--admin-bg-card);
+            border: 1px solid var(--admin-border-color);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--admin-border-color);
+            background: var(--admin-bg-tertiary);
+        }
+        
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--admin-text-primary);
+        }
+        
+        tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        /* Responsive */
+        /* Modern Banner Management Styles */
+        .banner-management {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .current-banner, .banner-upload {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .current-banner:hover, .banner-upload:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .current-banner h3, .banner-upload h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .banner-preview {
+            text-align: center;
+            padding: 25px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .banner-preview:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input[type="file"]:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--admin-accent-primary) 0%, var(--admin-accent-secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn-icon {
+            padding: 8px;
+            border: none;
+            background: none;
+            color: var(--admin-text-secondary);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--admin-accent-primary);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                width: 70px;
+            }
+            
+            .admin-sidebar-header h1,
+            .admin-nav-item span {
+                display: none;
+            }
+            
+            .admin-content {
+                margin-left: 70px;
+            }
+            
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .banner-management {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <header style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 20px 0;">
-        <div class="container" style="display:flex; justify-content: space-between; align-items: center; margin: 0 auto;">
-            <h1 style="font-size: 1.5rem; margin:0;">📋 Admin Dashboard</h1>
-            <p style="margin:0;">
-                <a href="/admin/products" style="color: var(--text-secondary); margin-right: 20px; text-decoration: none;">Pengaturan Produk</a>
-                <a href="/admin/test-webhook" style="color: var(--text-secondary); margin-right: 20px; text-decoration: none;">Tes Webhook</a>
-                <a href="/admin/logout" style="color: var(--text-secondary); text-decoration: none;">Logout</a>
-            </p>
-        </div>
-    </header>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <div class="admin-sidebar-logo">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h1>Web TopUp Admin</h1>
+            </div>
+            
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav-item active" onclick="showOrdersSection(event); return false;">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/products" class="admin-nav-item">
+                    <i class="fas fa-box"></i>
+                    <span>Produk</span>
+                </a>
+                <a href="#" class="admin-nav-item" onclick="showBannerSection()">
+                    <i class="fas fa-image"></i>
+                    <span>Banner Logo</span>
+                </a>
 
-    <main class="container">
+                <a href="/admin/logout" class="admin-nav-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+        <div class="admin-header">
+            <h1>Dashboard</h1>
+            <div class="admin-header-actions">
+                <button class="btn btn-primary" onclick="refreshData()" style="background-color: var(--accent-primary); border: none; padding: 8px 15px; border-radius: 6px; color: white; cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <div class="stat-card-title">Total Pesanan</div>
+                <div class="stat-card-value"><%= orders.length %></div>
+                <div class="stat-card-icon stat-total">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-title">Pembayaran Sukses</div>
+                <div class="stat-card-value">
+                    <%= orders.filter(order => order.paymentStatus === 'SUCCESS').length %>
+                </div>
+                <div class="stat-card-icon stat-success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-title">Pesanan Pending</div>
+                <div class="stat-card-value">
+                    <%= orders.filter(order => order.paymentStatus === 'PENDING' || order.fulfillmentStatus === 'PENDING').length %>
+                </div>
+                <div class="stat-card-icon stat-pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Orders Table -->
         <div class="card">
             <div class="card-header">
                 <h2>Daftar Semua Pesanan</h2>
@@ -42,13 +612,14 @@
                         <th>ID Pelanggan</th>
                         <th>Status Bayar</th>
                         <th>Status Kirim</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% if (orders.length > 0) { %>
                         <% orders.forEach(order => { %>
                             <tr>
-                                <td><%= order.trxId %></td>
+                                <td><strong><%= order.trxId %></strong></td>
                                 <td><%= order.product %></td>
                                 <td><%= order.productId %></td>
                                 <td>
@@ -60,18 +631,208 @@
                                     <% if (order.fulfillmentStatus === 'SUCCESS') { %> <span class="status status-success">SUKSES</span>
                                     <% } else if (order.fulfillmentStatus === 'PROCESSING') { %> <span class="status status-processing">DIPROSES</span>
                                     <% } else if (order.fulfillmentStatus === 'PENDING') { %> <span class="status status-pending">MENUNGGU</span>
-                                    <% } else { %> <span class="status status-failed">GAGAL</span> <% } %>
+                                    <% } else if (order.fulfillmentStatus === 'FAILED') { %> <span class="status status-failed">GAGAL</span>
+                                    <% } else { %> <span class="status status-processing">DIPROSES</span> <% } %>
+                                </td>
+                                <td>
+                                    <button class="btn-icon" title="Lihat Detail" style="background: none; border: none; color: var(--accent-primary); cursor: pointer;">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </td>
                             </tr>
                         <% }) %>
                     <% } else { %>
                         <tr>
-                            <td colspan="5" style="text-align: center;">Belum ada pesanan.</td>
+                            <td colspan="6" style="text-align: center; padding: 30px;">
+                                <i class="fas fa-inbox" style="font-size: 2rem; color: var(--text-secondary); margin-bottom: 10px; display: block;"></i>
+                                Belum ada pesanan.
+                            </td>
                         </tr>
                     <% } %>
                 </tbody>
             </table>
         </div>
-    </main>
+        
+        <!-- Banner Management Section -->
+        <div class="admin-section" id="banner-section" style="display: none;">
+            <h3><i class="fas fa-image me-2"></i>Kelola Banner</h3>
+            
+            <!-- Upload New Banner -->
+            <div class="upload-section mb-4">
+                <h5 class="mb-3"><i class="fas fa-upload me-2"></i>Upload Banner Baru</h5>
+                <form id="bannerUploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="bannerFile" class="form-label">Pilih File Banner (Bisa Multiple)</label>
+                        <input type="file" class="form-control" id="bannerFile" name="banners" accept="image/*" multiple>
+                        <div class="form-text">Format yang didukung: JPG, PNG, GIF. Ukuran maksimal: 5MB per file. Nama file bebas.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Banner(s)
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Current Banners -->
+            <div class="banner-preview">
+                <h5 class="mb-3">Banner yang Tersedia</h5>
+                <div id="bannersList" class="row">
+                    <!-- Banners will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function refreshData() {
+        window.location.reload();
+    }
+    
+    function showBannerSection() {
+        document.querySelectorAll('.admin-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('banner-section').style.display = 'block';
+        loadCurrentBanners();
+    }
+    
+    function loadCurrentBanners() {
+        fetch('/admin/banner-list')
+            .then(response => response.json())
+            .then(data => {
+                const bannersList = document.getElementById('bannersList');
+                if (data.banners && data.banners.length > 0) {
+                    bannersList.innerHTML = data.banners.map(banner => `
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card">
+                                <img src="${banner.path}" class="card-img-top" alt="${banner.filename}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">${banner.filename}</h6>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteBanner('${banner.filename}')">
+                                        <i class="fas fa-trash me-1"></i>Hapus
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    bannersList.innerHTML = `
+                        <div class="col-12 text-center text-muted">
+                            <i class="fas fa-image fa-3x mb-3"></i>
+                            <p>Tidak ada banner yang diupload</p>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading banners:', error);
+            });
+    }
+    
+    // Banner upload form handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const bannerUploadForm = document.getElementById('bannerUploadForm');
+        if (bannerUploadForm) {
+            bannerUploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                const fileInput = document.getElementById('bannerFile');
+                
+                // Append all selected files
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    formData.append('banners', fileInput.files[i]);
+                }
+                
+                fetch('/admin/upload-banners', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Banner berhasil diupload!');
+                        loadCurrentBanners();
+                        fileInput.value = '';
+                    } else {
+                        alert('Gagal upload banner: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat upload banner');
+                });
+            });
+        }
+    });
+    
+    function deleteBanner(filename) {
+        if (confirm(`Apakah Anda yakin ingin menghapus banner "${filename}"?`)) {
+            fetch('/admin/delete-banner', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Banner berhasil dihapus!');
+                    loadCurrentBanners();
+                } else {
+                    alert('Gagal menghapus banner: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus banner');
+            });
+        }
+    }
+    
+
+    
+    function showOrdersSection(event) {
+        // Prevent default link behavior
+        if (event) {
+            event.preventDefault();
+        }
+        
+        // Hide all sections
+        document.querySelectorAll('.admin-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Show orders table
+        const ordersTable = document.querySelector('.card');
+        if (ordersTable) {
+            ordersTable.style.display = 'block';
+        }
+        
+        // Update active nav item
+        document.querySelectorAll('.admin-nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Set dashboard as active
+        if (event) {
+            event.target.closest('.admin-nav-item').classList.add('active');
+        } else {
+            // Fallback for when called without event
+            const dashboardNav = document.querySelector('.admin-nav-item');
+            if (dashboardNav) {
+                dashboardNav.classList.add('active');
+            }
+        }
+    }
+    
+
+    
+    function refreshData() {
+        window.location.reload();
+    }
+</script>
 </body>
 </html>
