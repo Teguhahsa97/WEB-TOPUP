@@ -2,7 +2,7 @@
 builder = "dockerfile"
 
 [deploy]
-startCommand = "npx prisma db push --accept-data-loss && node index.js"
+startCommand = "node index.js"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 

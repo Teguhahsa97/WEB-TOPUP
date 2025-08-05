@@ -1,5 +1,8 @@
-# Use Node.js 18 LTS
+# Use Node.js 18 LTS with better compatibility
 FROM node:18-alpine
+
+# Install OpenSSL and other required dependencies
+RUN apk add --no-cache openssl openssl-dev curl
 
 # Set working directory
 WORKDIR /app
@@ -13,8 +16,9 @@ RUN npm ci --only=production
 # Copy source code
 COPY . .
 
-# Generate Prisma client
-RUN npx prisma generate
+# Run build and postbuild scripts
+RUN npm run build
+RUN npm run postbuild
 
 # Expose port
 EXPOSE 8080
