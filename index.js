@@ -65,10 +65,13 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(session({
-    secret: 'kunci-rahasia-super-aman-jangan-disebar',
+    secret: process.env.SESSION_SECRET || 'kunci-rahasia-super-aman-jangan-disebar',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 
 const checkAdmin = (req, res, next) => {
@@ -774,4 +777,29 @@ app.delete('/admin/delete-banner', checkAdmin, (req, res) => {
 app.get('/admin/test-webhook', checkAdmin, (req, res) => res.render('admin-test-webhook'));
 app.get('/admin/logout', (req, res) => req.session.destroy(() => res.redirect('/admin/login')));
 
-app.listen(port, '0.0.0.0', () => console.log(`Server berjalan di http://0.0.0.0:${port}`));
+const server = app.listen(port, '0.0.0.0', () => {
+    console.log(`Server berjalan di http://0.0.0.0:${port}`);
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+        console.log('HTTP server closed');
+        prisma.$disconnect().then(() => {
+            console.log('Database connection closed');
+            process.exit(0);
+        });
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received, shutting down gracefully');
+    server.close(() => {
+        console.log('HTTP server closed');
+        prisma.$disconnect().then(() => {
+            console.log('Database connection closed');
+            process.exit(0);
+        });
+    });
+});
