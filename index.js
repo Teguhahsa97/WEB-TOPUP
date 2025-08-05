@@ -774,4 +774,4 @@ app.delete('/admin/delete-banner', checkAdmin, (req, res) => {
 app.get('/admin/test-webhook', checkAdmin, (req, res) => res.render('admin-test-webhook'));
 app.get('/admin/logout', (req, res) => req.session.destroy(() => res.redirect('/admin/login')));
 
-app.listen(port, () => console.log(`Server berjalan di http://localhost:${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`Server berjalan di http://0.0.0.0:${port}`));
