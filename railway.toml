@@ -9,3 +9,4 @@ restartPolicyMaxRetries = 3
 [env]
 PORT = "8080"
 NODE_ENV = "production"
+RAILWAY_FORCE_REBUILD = "true"
