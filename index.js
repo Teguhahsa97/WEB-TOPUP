@@ -48,7 +48,7 @@ const upload = multer({
 
 const app = express();
 const prisma = new PrismaClient();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 let priceListCache = null;
 let lastFetchTimestamp = 0;
